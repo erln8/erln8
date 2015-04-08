@@ -11,15 +11,17 @@ import log;
 class Impl {
   string name;
   string[] commands;
+  string installbasedir;
+  string repodir;
+
+  //abstract void initOnce(Ini initialIni);
 
   abstract void processArgs(string args[]);
   abstract void runCommand(string[] cmdline);
   abstract void runConfig();
-  string getInstallBase() {
-    string home = defaultHome();
-    string p = expandTilde(buildNormalizedPath(getConfigDir(), name ~ "s")); // make it plural ;-)
-    log_debug(name, " install base = ", p);
-    return p;
+
+  string getConfigSubdir(string subdir) {
+    return expandTilde(buildNormalizedPath(getConfigDir(), subdir));
   }
 }
 
@@ -28,17 +30,12 @@ class Erln8Impl : Impl {
   this() {
     name = "erln8";
     commands = ["erlc"];
+    installbasedir = getConfigSubdir("otps");
+    repodir = getConfigSubdir("repos");
   }
 
   override void processArgs(string args[]) {
 
-  }
-
-  override string getInstallBase() {
-    string home = defaultHome();
-    string p = expandTilde(buildNormalizedPath(getConfigDir(), "otps"));
-    log_debug("erln8 install base = ", p);
-    return p;
   }
 
   override void runCommand(string[] cmdline) {
@@ -53,7 +50,8 @@ class Erln8Impl : Impl {
         log_fatal("Unknown Erlang id: ", erlid);
         exit(-1);
       }
-      getInstallBase();
+      log_debug("installbasedir = ", installbasedir);
+      log_debug("repodir = ", repodir);
     } else {
       log_fatal("Can't find a configured version of Erlang");
       exit(-1);
@@ -70,30 +68,4 @@ class Erln8Impl : Impl {
 }
 
 
-//class ReoImpl : Impl {
-//  override void processArgs(string args[]) {
-//  }
-//
-//  override void runImpl() {
-//
-//  }
-//
-//  override void configImpl() {
-//
-//  }
-//}
-//
-//
-//class Reo3Impl : Impl {
-//  override void processArgs(string args[]) {
-//  }
-//
-//  override void runImpl() {
-//
-//  }
-//
-//  override void configImpl() {
-//
-//  }
-//}
-//
+
