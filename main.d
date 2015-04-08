@@ -8,6 +8,7 @@ import std.process;
 import std.getopt;
 import std.c.stdlib; // exit()
 import std.path;
+import std.file; // exists()
 
 import dini; // ini parser
 
@@ -15,41 +16,13 @@ import spinner;
 import log;
 import options;
 import impl;
+import config;
 import dirconfig;
 
-
-string[string] config;
 string erln8_home;
 
 Impl[string] impls;
 Impl[string] implCommands;
-
-
-
-string defaultHome() {
-  try {
-    string home = environment["ERLN8_HOME"];
-    writeln("Using ERLN8_HOME env var:", home);
-    return home;
-  } catch (Exception e) {
-    try {
-      string home = environment["HOME"];
-      writeln("Using HOME env var:", home);
-      return home;
-    } catch (Exception e) {
-      log_fatal("Unable to detect HOME or ERLN8_HOME, you're weird!");
-      exit(-1);
-      return "";
-    }
-  }
-
-}
-
-void readIni() {
-  auto ini = Ini.Parse("/Users/dparfitt/.erln8.d/config");
-  //writeln(ini["Repos"].getKey["default"]);
-  writeln(ini["Repos"].getKey("default"));
-}
 
 void gitLog() {
  // escapeShellCommand
@@ -82,9 +55,6 @@ void main(string[] args) {
     impl.runConfig();
   } else if(binname in implCommands) {
     log_debug("Using command impl:", binname);
-
-    getConfigFromCWD();
-
     Impl impl = implCommands[binname];
     impl.processArgs(args);
     impl.runCommand(args);

@@ -1,27 +1,34 @@
 import std.path;
 import std.file;
+import std.typecons; // Nullable
 
 import dini;
 import log;
 
-void getConfigFromCWD() {
+Nullable!Ini getConfigFromCWD() {
   string cwd = getcwd();
-  getDirConfig(cwd);
-  //auto ini = Ini.Parse("/Users/dparfitt/.erln8.d/config");
-  //writeln(ini["Repos"].getKey["default"]);
-  //writeln(ini["Repos"].getKey("default"));
+  return getDirConfig(cwd);
 }
 
-void getDirConfig(string path) {
+//writeln(ini["Repos"].getKey["default"]);
+//writeln(ini["Repos"].getKey("default"));
+
+Nullable!Ini getDirConfig(string path) {
   if(path == rootName(path)) {
     log_debug("Got to root dir");
-    return;
+    Nullable!Ini result;
+    return result;
   }
   string cfgFileName = buildNormalizedPath(path, "erln8.config");
-  log_debug("Looking for ", cfgFileName);
-
-  auto segments = pathSplitter(path);
-  log_debug("FOO:", segments.stringof);
-  //auto parent  = segments[0 .. $ - 1];
-  //getDirConfig(parent);
+  log_debug("Looking for config ", cfgFileName);
+  if(exists(cfgFileName)) {
+    log_debug("Found!");
+    Ini ini = Ini.Parse(cfgFileName);
+    Nullable!Ini result;
+    result = ini;
+    return result;
+  } else {
+    string parent = buildNormalizedPath(path ~ dirSeparator ~ "..");
+    return getDirConfig(parent);
+  }
 }
