@@ -2,6 +2,7 @@ import std.stdio;
 import std.typecons; // Nullable
 import std.c.stdlib; // exit()
 import std.path;
+import std.process;
 
 import config;
 import dirconfig;
@@ -41,21 +42,30 @@ class Erln8Impl : Impl {
   override void runCommand(string[] cmdline) {
     Ini cfg = getAppConfig();
     log_debug("Config:", cfg);
-    writeln("Running ", cmdline);
+    log_debug("Running: ", cmdline);
+    string bin = baseName(cmdline[0]);
+
     Nullable!Ini dirini = getConfigFromCWD();
-    if(!dirini.isNull) {
-      log_debug("Erlang id:", dirini["Config"].getKey("Erlang"));
-      string erlid = dirini["Config"].getKey("Erlang");
-      if(!isValidErlang(cfg, erlid)) {
-        log_fatal("Unknown Erlang id: ", erlid);
-        exit(-1);
-      }
-      log_debug("installbasedir = ", installbasedir);
-      log_debug("repodir = ", repodir);
-    } else {
+    if(dirini.isNull) {
       log_fatal("Can't find a configured version of Erlang");
       exit(-1);
     }
+
+    log_debug("Erlang id:", dirini["Config"].getKey("Erlang"));
+    string erlid = dirini["Config"].getKey("Erlang");
+    if(!isValidErlang(cfg, erlid)) {
+      log_fatal("Unknown Erlang id: ", erlid);
+      exit(-1);
+    }
+    log_debug("installbasedir = ", installbasedir);
+    log_debug("repodir = ", repodir);
+
+
+    string binFullPath = buildNormalizedPath(installbasedir, erlid, bin);
+    log_debug("mapped cmd to execute = ", binFullPath);
+    auto argsPassthrough = [bin] ~ cmdline[1 .. $];
+    log_debug("Args = ", argsPassthrough);
+    execv(binFullPath, argsPassthrough);
   }
 
   override void runConfig() {
