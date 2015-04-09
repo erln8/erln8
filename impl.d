@@ -112,7 +112,13 @@ class Erln8Impl : Impl {
         auto result = executeShell(cmd);
         // TODO: check result.status
         writeln(result.output);
+      }
+    } else if(currentOpts.opt_list) {
+      auto keys = cfg["Erlangs"].keys();
+      log_debug(keys);
 
+      foreach(k,v;keys) {
+        writeln(k, " -> ", v);
       }
     } else {
       log_debug("Nothing to do");
