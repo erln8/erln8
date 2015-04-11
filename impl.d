@@ -281,6 +281,51 @@ class Erln8Impl : Impl {
     }
   }
 
+
+
+class BuildCommand {
+  this(string description, string command) {
+    desc = description;
+    cmd = command;
+  }
+  string desc;
+  string cmd;
+}
+
+
+class Builder {
+
+  void run() {
+    int i = 0;
+    foreach(bc;cmds) {
+      Spinner spinner = new FastSpinner();
+      log_debug("Running ", bc.cmd);
+      write(format("[%d] %s ", i, bc.desc));
+
+      spinner.start();
+      auto p = executeShell(bc.cmd);
+      spinner.stop();
+      if(p.status != 0) {
+        writeln("Failed");
+        //g_error("Build error, please check the build logs for more details\n");
+        return;
+      }
+      writeln("");
+      i++;
+    }
+
+    // TODO: setup links
+    // TODO: setup binaries
+  }
+
+  void addCommand(string desc, string cmd) {
+    cmds = cmds ~ new BuildCommand(desc, cmd);
+  }
+
+  private:
+  BuildCommand[] cmds = [];
+}
+
   void doBuild(Ini cfg) {
     ErlangBuildOptions opts = getBuildOptions(currentOpts.opt_repo,
                                               currentOpts.opt_tag,
@@ -305,25 +350,38 @@ class Erln8Impl : Impl {
 
     string tmp = tempDir();
     log_debug("tmp dir = ", tmp);
-
-    /*
-      "[0] copy source                    ",
-      "[1] otp_build                      ",
-      "[2] configure                      ",
-      "[3] make                           ",
-      "[4] make install                   ",
-      "[5] make install-docs              ",
-    */
+    log_debug("log dir = ", tmp);
 
     string cmd0 = format("%s cd %s && git archive %s | (cd %s; tar -f - -x)",
                           env,  sourcePath,     opts.tag, tmp);
-    log_debug(cmd0);
 
-    Spinner spinner = new FastSpinner();
-    spinner.start();
-    auto cmd0out = executeShell(cmd0);
-    spinner.stop();
+    string cmd1 = format("%s cd %s && ./otp_build autoconf > ./build_log 2>&1",
+                          env, tmp);
+    string cmd2 = format("%s cd %s && ./configure --prefix=%s %s >> ./build_log 2>&1",
+                          env, tmp, outputPath, ""); // TODO buildconfig
 
+    string cmd3 = format("%s cd %s && %s >> ./build_log 2>&1",
+                          env, tmp, makeBin);
+
+    string cmd4 = format("%s cd %s && %s install >> ./build_log 2>&1",
+                          env, tmp, makeBin);
+
+    string cmd5 = format("%s cd %s && %s install-docs >> ./build_log 2>&1",
+                          env, tmp, makeBin);
+
+    Builder b = new Builder();
+    b.addCommand("Copy source", cmd0);
+    b.addCommand("opt_build", cmd1);
+    b.addCommand("configure", cmd2);
+    b.addCommand("make", cmd3);
+    b.addCommand("make install", cmd4);
+    b.addCommand("make install-docs", cmd4);
+    // TODO: build plt
+    b.run();
+    log_debug("Adding Erlang id to erln8.config");
+    cfg["Erlangs"].setKey(opts.id, outputPath);
+    saveAppConfig(cfg);
+    writeln("Done!");
   }
 
   override void runConfig() {

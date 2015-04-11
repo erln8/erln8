@@ -2,6 +2,7 @@ import std.file;
 import std.path;
 import std.c.stdlib; // exit()
 import std.process;
+import std.stdio;
 
 import dini;
 import log;
@@ -52,4 +53,22 @@ Ini getAppConfig() {
   return ini;
 }
 
+void saveAppConfig(Ini cfg) {
+  string cfgFileName = buildNormalizedPath(getConfigDir(), "config");
+  log_debug("Attempting to save ", cfgFileName);
+  if(!exists(cfgFileName)) {
+    log_fatal("erln8 has not been initialized");
+    exit(-1);
+  }
+
+  File output = File(cfgFileName, "w");
+  foreach(section;cfg.sections) {
+    auto keys = cfg[section.name].keys();
+    output.writeln("[" ~ section.name ~ "]");
+    foreach(k,v;keys) {
+      output.writeln(k, "=", v);
+    }
+    output.writeln("");
+  }
+}
 
