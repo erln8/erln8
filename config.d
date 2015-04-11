@@ -25,6 +25,17 @@ string defaultHome() {
 
 }
 
+string getMakeBin() {
+  try {
+    string make_bin = environment["MAKE_BIN"];
+    log_debug("Using MAKE_BIN env var:", make_bin);
+    return make_bin;
+  } catch (Exception e) {
+    log_debug("Using make");
+    return "make";
+  }
+}
+
 string getConfigDir() {
   // should be already expandTilde'd
   return buildNormalizedPath(defaultHome(), ".erln8.d");

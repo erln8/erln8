@@ -24,12 +24,6 @@ string erln8_home;
 Impl[string] impls;
 Impl[string] implCommands;
 
-void gitLog() {
- // escapeShellCommand
-  auto foo = executeShell("cd /Users/dparfitt/.erln8.d/repos/default && git log > /dev/null");
-  //writeln(foo.output);
-}
-
 void registerImpl(Impl i) {
   impls[i.name] = i;
   log_debug("Registering impl ", i.name);

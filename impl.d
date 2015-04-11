@@ -52,6 +52,12 @@ struct Erln8Options {
   bool   opt_debug     = false;
 }
 
+struct ErlangBuildOptions {
+  string repo;
+  string tag;
+  string id;
+  string configname;
+}
 
 class Erln8Impl : Impl {
   Erln8Options currentOpts;
@@ -208,6 +214,73 @@ class Erln8Impl : Impl {
     wait(pid);
   }
 
+ 
+
+  bool isValidErlang(Ini ini, string id) {
+    return ini["Erlangs"].hasKey(id);
+  }
+
+
+
+
+
+  ErlangBuildOptions getBuildOptions(string repo, string tag, string id, string configname) {
+    ErlangBuildOptions opts;
+    opts.repo = (repo == null ? "default" : repo);
+    opts.tag = tag;
+    opts.id  = id;
+    // TODO: use Erlang.default_config value here
+    //opts.configname = (configname == null ? "default_config" : configname);
+    opts.configname = configname;
+    return opts;
+  }
+
+  void verifyInputs(Ini cfg, ErlangBuildOptions build_options) {
+    auto erlangs = cfg["Erlangs"].keys();
+    if(build_options.id in erlangs) {
+      writeln("A version of Erlang already exists with the id ", build_options.id);
+      exit(-1);
+    }
+
+    auto repos = cfg["Repos"].keys();
+    if(!(build_options.repo in repos)) {
+      writeln("Unconfigured repo: ", build_options.repo);
+      exit(-1);
+    }
+
+    string repoURL = cfg["Repos"].getKey(build_options.repo);
+    string repoPath = buildNormalizedPath(getConfigSubdir("repos"),build_options.repo);
+
+    if(!exists(repoPath)) {
+      writeln("Missing repo for " ~ currentOpts.opt_fetch
+          ~ ", which should be in " ~ repoPath ~ ". Maybe you forgot to erln8 --clone <repo_name>");
+      exit(-1);
+    }
+
+    // TODO
+    //auto configs = cfg["Configs"].keys();
+    //if(!(build_options.configname in configs)) {
+    //  writeln("Unknown build config: ", build_options.configname);
+    //  exit(-1);
+    // }
+
+  }
+
+
+  void doBuild(Ini cfg) {
+    ErlangBuildOptions opts = getBuildOptions(currentOpts.opt_repo,
+                                              currentOpts.opt_tag,
+                                              currentOpts.opt_id,
+                                              currentOpts.opt_config);
+
+    verifyInputs(cfg, opts);
+    string makeBin = getMakeBin();
+
+    string outputRoot = buildNormalizedPath(getConfigSubdir("otps"),opts.id);
+    string outputPath = buildNormalizedPath(outputRoot, "dist");
+    string sourcePath = buildNormalizedPath(getConfigSubdir("repos"), opts.repo);
+  }
+
   override void runConfig() {
     // TODO: this has to go after init
     // TODO: don't pass cfg everywhere?
@@ -228,6 +301,8 @@ class Erln8Impl : Impl {
       doClone(cfg);
     } else if(currentOpts.opt_fetch) {
       doFetch(cfg);
+    } else if(currentOpts.opt_build) {
+      doBuild(cfg);
     } else {
       log_debug("Nothing to do");
     }
@@ -261,10 +336,6 @@ class Erln8Impl : Impl {
     execv(binFullPath, argsPassthrough);
   }
 
-
-  bool isValidErlang(Ini ini, string id) {
-    return ini["Erlangs"].hasKey(id);
-  }
 }
 
 
