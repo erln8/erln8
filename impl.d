@@ -5,11 +5,13 @@ import std.path;
 import std.process;
 import std.getopt;
 import std.file;
+import std.format;
 
 import config;
 import dirconfig;
 import dini;
 import log;
+import spinner;
 
 class Impl {
   string name;
@@ -266,6 +268,18 @@ class Erln8Impl : Impl {
 
   }
 
+  void checkObject(ErlangBuildOptions opts, string sourcePath) {
+    string checkObj = "cd " ~ sourcePath ~ " && git show-ref " ~ opts.tag ~ " > /dev/null";
+    log_debug(checkObj);
+    auto shell = executeShell(checkObj);
+    if(shell.status != 0) {
+      writeln("branch or tag " ~ opts.tag ~ " does not exist in " ~ opts.repo ~ " Git repo");
+      log_debug("Git object missing");
+      exit(-1);
+    } else {
+      log_debug("Git object exists");
+    }
+  }
 
   void doBuild(Ini cfg) {
     ErlangBuildOptions opts = getBuildOptions(currentOpts.opt_repo,
@@ -274,11 +288,42 @@ class Erln8Impl : Impl {
                                               currentOpts.opt_config);
 
     verifyInputs(cfg, opts);
-    string makeBin = getMakeBin();
 
     string outputRoot = buildNormalizedPath(getConfigSubdir("otps"),opts.id);
     string outputPath = buildNormalizedPath(outputRoot, "dist");
     string sourcePath = buildNormalizedPath(getConfigSubdir("repos"), opts.repo);
+
+    checkObject(opts, sourcePath);
+    string makeBin = getMakeBin();
+
+    // TODO: build config _env
+    string env = "";
+
+    log_debug("Output path = ", outputPath);
+    log_debug("Source path = ", sourcePath);
+    // TODO: logs!
+
+    string tmp = tempDir();
+    log_debug("tmp dir = ", tmp);
+
+    /*
+      "[0] copy source                    ",
+      "[1] otp_build                      ",
+      "[2] configure                      ",
+      "[3] make                           ",
+      "[4] make install                   ",
+      "[5] make install-docs              ",
+    */
+
+    string cmd0 = format("%s cd %s && git archive %s | (cd %s; tar -f - -x)",
+                          env,  sourcePath,     opts.tag, tmp);
+    log_debug(cmd0);
+
+    Spinner spinner = new FastSpinner();
+    spinner.start();
+    auto cmd0out = executeShell(cmd0);
+    spinner.stop();
+
   }
 
   override void runConfig() {

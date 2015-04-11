@@ -1,12 +1,26 @@
 import std.stdio;
-//import std.string;
-//import std.file;
-//import std.process;
 import core.thread;
+
+class SlowSpinner : Spinner {
+  this() {
+    super(500);
+  }
+}
+
+class FastSpinner : Spinner {
+  this() {
+    super(50);
+  }
+}
 
 class Spinner : Thread
 {
   this() {
+    super(&run);
+  }
+
+  this(int d) {
+    delay = d;
     super(&run);
   }
 
@@ -23,12 +37,13 @@ private:
       if(i == chars.length)
         i=0;
         write(chars[i]);
-        Thread.sleep(dur!("msecs")(100));
+        Thread.sleep(dur!("msecs")(delay));
         write("\b");
         stdout.flush();
       i++;
     }
   }
   bool running = false;
+  int delay = 100;
 }
 
