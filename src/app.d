@@ -39,9 +39,8 @@ void registerImpl(Impl i) {
 
 
 void main(string[] args) {
-  //setupLinks("/Users/dparfitt/.erln8.d/otps/R15B03_1");
 
-  log_level = LogLevel.ERROR;
+  //log_level = LogLevel.ERROR;
   log_debug("log_level = ", log_level);
 
   log_debug("erln8 args:", args);
