@@ -46,10 +46,13 @@ void main(string[] args) {
 //    }
 //  }
 //
+
+  log_level = LogLevel.ERROR;
+  log_debug("log_level = ", log_level);
+
   log_debug("erln8 args:", args);
   erln8_home = defaultHome();
   writeln("erln8 v2");
-
   registerImpl(new Erln8Impl());
 
   string binname = baseName(args[0]);

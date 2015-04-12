@@ -12,6 +12,7 @@ import dirconfig;
 import dini;
 import log;
 import spinner;
+import utils;
 
 class Impl {
   string name;
@@ -295,27 +296,27 @@ class BuildCommand {
 
 class Builder {
 
-  void run() {
+  bool run() {
     int i = 0;
     foreach(bc;cmds) {
-      Spinner spinner = new FastSpinner();
+      Kit spinner = new Kit();
       log_debug("Running ", bc.cmd);
       write(format("[%d] %s ", i, bc.desc));
 
       spinner.start();
       auto p = executeShell(bc.cmd);
       spinner.stop();
+      spinner.join();
       if(p.status != 0) {
-        writeln("Failed");
-        //g_error("Build error, please check the build logs for more details\n");
-        return;
+        writeln("Build error, please check the build logs for more details");
+        return false;
       }
       writeln("");
       i++;
     }
-
     // TODO: setup links
     // TODO: setup binaries
+    return true;
   }
 
   void addCommand(string desc, string cmd) {
@@ -328,6 +329,7 @@ class Builder {
 
 
   void setupLinks(Ini cfg, ErlangBuildOptions opts) {
+    // NOPE!
     //"cd ", path, " && for i in `find -L . -perm -111 -type f | grep -v \"\\.so\" | grep -v \"\\.o\" | grep -v \"lib/erlang/bin\" | grep -v Install`; do  `ln -s -f $i $(basename $i)` ; done";
 
   }
@@ -351,11 +353,13 @@ class Builder {
 
     log_debug("Output path = ", outputPath);
     log_debug("Source path = ", sourcePath);
-    // TODO: logs!
 
-    string tmp = tempDir();
+    string tmp = buildNormalizedPath(tempDir(), getTimestampedFilename());
     log_debug("tmp dir = ", tmp);
-    log_debug("log dir = ", tmp);
+    string logFile = buildNormalizedPath(tmp, "build_log");
+    log_debug("log = ", tmp);
+
+    mkdirRecurse(tmp);
 
     string cmd0 = format("%s cd %s && git archive %s | (cd %s; tar -f - -x)",
                           env,  sourcePath,     opts.tag, tmp);
@@ -365,7 +369,8 @@ class Builder {
     string cmd2 = format("%s cd %s && ./configure --prefix=%s %s >> ./build_log 2>&1",
                           env, tmp, outputPath, ""); // TODO buildconfig
 
-    string cmd3 = format("%s cd %s && %s >> ./build_log 2>&1",
+    // TODO: configurable parallelism
+    string cmd3 = format("%s cd %s && %s -j4 >> ./build_log 2>&1",
                           env, tmp, makeBin);
 
     string cmd4 = format("%s cd %s && %s install >> ./build_log 2>&1",
@@ -375,14 +380,20 @@ class Builder {
                           env, tmp, makeBin);
 
     Builder b = new Builder();
-    b.addCommand("Copy source", cmd0);
-    b.addCommand("opt_build", cmd1);
-    b.addCommand("configure", cmd2);
-    b.addCommand("make", cmd3);
-    b.addCommand("make install", cmd4);
-    b.addCommand("make install-docs", cmd4);
+    b.addCommand("Copy source          ", cmd0);
+    b.addCommand("opt_build            ", cmd1);
+    b.addCommand("configure            ", cmd2);
+    b.addCommand("make                 ", cmd3);
+    b.addCommand("make install         ", cmd4);
+    b.addCommand("make install-docs    ", cmd4);
     // TODO: build plt
-    b.run();
+    if(!b.run()) {
+      writeln("*** Build failed ***");
+      writeln("Here are the last 10 lines of " ~ logFile);
+      auto pid = spawnShell("tail -10 " ~ logFile);
+      wait(pid);
+      return;
+    }
     log_debug("Adding Erlang id to erln8.config");
     cfg["Erlangs"].setKey(opts.id, outputPath);
     saveAppConfig(cfg);
