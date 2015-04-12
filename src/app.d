@@ -10,6 +10,8 @@ import std.c.stdlib; // exit()
 import std.path;
 import std.file; // exists()
 
+import std.string;
+
 import dini; // ini parser
 
 import spinner;
@@ -31,21 +33,13 @@ void registerImpl(Impl i) {
     log_debug("Registering command ", i.name, ":", name);
     implCommands[name] = i;
   }
+  log_debug("executables provided: ", i.getSymlinkedExecutables());
   log_debug("Finished registering impl ", i.name);
 }
 
+
 void main(string[] args) {
-
-
-//  foreach (DirEntry de; dirEntries("/Users/dparfitt/.erln8.d/otps/foo/dist/bin", SpanMode.depth))
-//  {
-//    if(de.isFile()) {
-//      if(de.attributes() == 33261) {
-//        writeln(baseName(de.name), " -> ", de);
-//      }
-//    }
-//  }
-//
+  //setupLinks("/Users/dparfitt/.erln8.d/otps/R15B03_1");
 
   log_level = LogLevel.ERROR;
   log_debug("log_level = ", log_level);
@@ -70,6 +64,7 @@ void main(string[] args) {
     log_fatal("Unknown command: ", binname);
     exit(-1);
   }
+
 }
 
 //  try {

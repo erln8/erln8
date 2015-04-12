@@ -6,6 +6,7 @@ import std.process;
 import std.getopt;
 import std.file;
 import std.format;
+import std.string;
 
 import config;
 import dirconfig;
@@ -25,7 +26,7 @@ class Impl {
   abstract void processArgs(string[] args);
   abstract void runCommand(string[] cmdline);
   abstract void runConfig();
-
+  abstract string[] getSymlinkedExecutables();
   string getConfigSubdir(string subdir) {
     return expandTilde(buildNormalizedPath(getConfigDir(), subdir));
   }
@@ -61,6 +62,33 @@ struct ErlangBuildOptions {
   string id;
   string configname;
 }
+
+// executables to symlink to after a build is complete
+
+string[] bins = [
+  "bin/ct_run",
+  "bin/dialyzer",
+  "bin/epmd",
+  "bin/erl",
+  "bin/erlc",
+  "bin/escript",
+  "bin/run_erl",
+  "bin/run_test",
+  "bin/to_erl",
+  "bin/typer",
+  "lib/erlang/lib/diameter-*/bin/diameterc",
+  "lib/erlang/lib/edoc-*/priv/edoc_generate",
+  "lib/erlang/lib/erl_interface-*/bin/erl_call",
+  "lib/erlang/lib/inets-*/priv/bin/runcgi.sh",
+  "lib/erlang/lib/observer-*/priv/bin/cdv",
+  "lib/erlang/lib/observer-*/priv/bin/etop",
+  "lib/erlang/lib/odbc-*/priv/bin/odbcserver",
+  "lib/erlang/lib/os_mon-*/priv/bin/memsup",
+  "lib/erlang/lib/snmp-*/bin/snmpc",
+  "lib/erlang/lib/tools-*/bin/emem",
+  "lib/erlang/lib/webtool-*/priv/bin/start_webtool"
+];
+
 
 class Erln8Impl : Impl {
   Erln8Options currentOpts;
@@ -103,6 +131,14 @@ class Erln8Impl : Impl {
       }
     log_debug(opts);
     currentOpts = opts;
+  }
+
+  override string[] getSymlinkedExecutables() {
+    string[] all = [];
+    foreach(bin;bins) {
+      all = all ~ baseName(bin);
+    }
+    return all;
   }
 
   void doBuildable(Ini cfg) {
@@ -328,11 +364,39 @@ class Builder {
 }
 
 
-  void setupLinks(Ini cfg, ErlangBuildOptions opts) {
-    // NOPE!
-    //"cd ", path, " && for i in `find -L . -perm -111 -type f | grep -v \"\\.so\" | grep -v \"\\.o\" | grep -v \"lib/erlang/bin\" | grep -v Install`; do  `ln -s -f $i $(basename $i)` ; done";
-
+  void setupLinks(string root) {
+    foreach(bin;bins) {
+      string base = baseName(bin);
+      if(bin.indexOf('*') >= 0) {
+        // paths that include a *
+        string p = buildNormalizedPath(root, "dist", bin);
+        log_debug("Getting full path of ", p);
+        log_debug("  basename = ", base);
+        auto ls = executeShell("ls " ~ p);
+        if (ls.status != 0) {
+          writeln("Failed to find file while creating symlink: ", p);
+          // keep going, maybe a command has been removed?
+        } else {
+          if(splitLines(ls.output).length > 1) {
+            log_fatal("Found more than 1 executable for ", p , " while creating symlinks");
+            exit(-1);
+          }
+          string fullpath = strip(splitLines(ls.output)[0]);
+          string linkTo = buildNormalizedPath(root, base);
+          log_debug("Found ", fullpath);
+          log_debug("symlink ", fullpath, " to ", linkTo);
+          symlink(fullpath, linkTo);
+        }
+      } else {
+        // paths that do not include a *
+        string fullpath = buildNormalizedPath(root, "dist", bin);
+        string linkTo = buildNormalizedPath(root, base);
+        log_debug("symlink ", fullpath, " to ", linkTo);
+        symlink(fullpath, linkTo);
+      }
+    }
   }
+
   void doBuild(Ini cfg) {
     ErlangBuildOptions opts = getBuildOptions(currentOpts.opt_repo,
                                               currentOpts.opt_tag,
