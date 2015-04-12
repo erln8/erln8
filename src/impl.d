@@ -21,7 +21,7 @@ class Impl {
 
   //abstract void initOnce(Ini initialIni);
 
-  abstract void processArgs(string args[]);
+  abstract void processArgs(string[] args);
   abstract void runCommand(string[] cmdline);
   abstract void runConfig();
 
@@ -71,7 +71,7 @@ class Erln8Impl : Impl {
     repodir = getConfigSubdir("repos");
   }
 
-  override void processArgs(string args[]) {
+  override void processArgs(string[] args) {
     Erln8Options opts;
     auto rslt = getopt(
             args,
@@ -326,6 +326,11 @@ class Builder {
   BuildCommand[] cmds = [];
 }
 
+
+  void setupLinks(Ini cfg, ErlangBuildOptions opts) {
+    //"cd ", path, " && for i in `find -L . -perm -111 -type f | grep -v \"\\.so\" | grep -v \"\\.o\" | grep -v \"lib/erlang/bin\" | grep -v Install`; do  `ln -s -f $i $(basename $i)` ; done";
+
+  }
   void doBuild(Ini cfg) {
     ErlangBuildOptions opts = getBuildOptions(currentOpts.opt_repo,
                                               currentOpts.opt_tag,
@@ -381,6 +386,7 @@ class Builder {
     log_debug("Adding Erlang id to erln8.config");
     cfg["Erlangs"].setKey(opts.id, outputPath);
     saveAppConfig(cfg);
+    // TODO: setup binaries
     writeln("Done!");
   }
 

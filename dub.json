@@ -1,0 +1,8 @@
+{
+	"name": "erln8",
+	"description": "A sneaky Erlang version manager.",
+	"copyright": "Copyright © 2015, dparfitt",
+	"authors": ["Dave Parfitt <diparfitt@gmail.com>"],
+	"dependencies": {
+	}
+}

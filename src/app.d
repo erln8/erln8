@@ -35,6 +35,17 @@ void registerImpl(Impl i) {
 }
 
 void main(string[] args) {
+
+
+//  foreach (DirEntry de; dirEntries("/Users/dparfitt/.erln8.d/otps/foo/dist/bin", SpanMode.depth))
+//  {
+//    if(de.isFile()) {
+//      if(de.attributes() == 33261) {
+//        writeln(baseName(de.name), " -> ", de);
+//      }
+//    }
+//  }
+//
   log_debug("erln8 args:", args);
   erln8_home = defaultHome();
   writeln("erln8 v2");
@@ -56,6 +67,7 @@ void main(string[] args) {
     log_fatal("Unknown command: ", binname);
     exit(-1);
   }
+}
 
 //  try {
 //     getOptions(args);
@@ -68,5 +80,5 @@ void main(string[] args) {
 //      writeln("erln8",
 //        helpInformation.options);
 //    }
-}
+
 

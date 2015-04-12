@@ -7,7 +7,7 @@ enum LogLevel {
   FATAL
 }
 
-LogLevel log_level = LogLevel.DEBUG;
+LogLevel log_level = LogLevel.ERROR;
 
 
 void log(T...)(T args) {
