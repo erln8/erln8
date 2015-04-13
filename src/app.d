@@ -18,6 +18,7 @@ import spinner;
 import log;
 import options;
 import impl;
+import erln8impl;
 import config;
 import dirconfig;
 
