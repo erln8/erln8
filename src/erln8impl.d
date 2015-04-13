@@ -116,6 +116,39 @@ string[] bins = [
       currentOpts = opts;
     }
 
+    override void initOnce() {
+      log_debug("Erln8 init once");
+      mkdir(getConfigDir());
+      mkdir(buildNormalizedPath(getConfigDir(), "otps"));
+      mkdir(buildNormalizedPath(getConfigDir(), "repos"));
+      // create ~/.erln8.d
+      // create ~/.erln8.d/otps/
+      // create ~/.erln8.d/repos/
+
+      // create ~/.erln8.d/config file
+      File config = File(buildNormalizedPath(getConfigDir(), "config"), "w");
+      config.writeln(q"EOS
+[Erln8]
+default_config=default
+system_default=
+color=true
+
+[Repos]
+default=https://github.com/erlang/otp.git
+
+[Erlangs]
+none=
+
+[Configs]
+osx_gcc=--disable-hipe --enable-smp-support --enable-threads --enable-kernel-poll --enable-darwin-64bit
+default=
+osx_llvm=--disable-hipe --enable-smp-support --enable-threads --enable-kernel-poll --enable-darwin-64bit
+osx_llvm_dtrace=--disable-hipe --enable-smp-support --enable-threads --enable-kernel-poll --enable-darwin-64bit --enable-vm-probes --with-dynamic-trace=dtrace
+osx_gcc_env=CC=gcc-4.2 CPPFLAGS='-DNDEBUG' MAKEFLAGS='-j 3'k
+EOS"
+);
+    }
+
     override string[] getSymlinkedExecutables() {
       string[] all = [];
       foreach(bin;bins) {

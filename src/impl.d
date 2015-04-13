@@ -11,7 +11,7 @@ class Impl {
   string installbasedir;  // where the compiled package lives in erln8
   string repodir;         // where erln8/reo keeps this impls git repo
 
-  //abstract void initOnce(Ini initialIni);
+  abstract void initOnce();
 
   abstract void processArgs(string[] args);
   abstract void runCommand(string[] cmdline);

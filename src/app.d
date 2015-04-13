@@ -47,8 +47,9 @@ void main(string[] args) {
   log_debug("erln8 args:", args);
   erln8_home = defaultHome();
   writeln("erln8 v2");
-  registerImpl(new Erln8Impl());
-
+  Erln8Impl e8 = new Erln8Impl();
+  registerImpl(e8);
+//  e8.initOnce();
   string binname = baseName(args[0]);
   if(binname in impls) {
     log_debug("Using config impl:", binname);
