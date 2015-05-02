@@ -124,7 +124,7 @@ EOS"
       file.writeln("Rebar=", rebarId);
     }
 
- 
+
     bool isValidRebar(Ini ini, string id) {
       return ini[IdKey].hasKey(id);
     }

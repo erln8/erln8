@@ -16,29 +16,6 @@ import utils;
 import builder;
 import impl;
 
-struct Erln8Options {
-  bool   opt_init      = false;
-  string opt_use       = null;
-  bool   opt_list      = false;
-  string opt_clone     = null;
-  string opt_fetch     = null;
-  bool   opt_build     = false;
-  string opt_repo      = null;
-  string opt_tag       = null;
-  string opt_id        = null;
-  string opt_config    = null;
-  bool   opt_show      = false;
-  bool   opt_prompt    = false;
-  bool   opt_configs   = false;
-  bool   opt_repos     = false;
-  bool   opt_link      = false;
-  bool   opt_unlink    = false;
-  bool   opt_force     = false;
-  bool   opt_nocolor   = false;
-  bool   opt_buildable = false;
-  bool   opt_debug     = false;
-}
-
 struct ErlangBuildOptions {
   string repo;
   string tag;

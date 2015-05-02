@@ -16,7 +16,6 @@ import dini; // ini parser
 
 import spinner;
 import log;
-import options;
 import impl;
 import config;
 import dirconfig;

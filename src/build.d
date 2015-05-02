@@ -9,5 +9,4 @@ import dini;
 import log;
 import config;
 import spinner;
-import options;
 

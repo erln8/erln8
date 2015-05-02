@@ -14,7 +14,6 @@ import log;
 import utils;
 
 struct CommandLineOptions {
-  bool   opt_init      = false;
   string opt_use       = null;
   bool   opt_list      = false;
   string opt_clone     = null;
@@ -56,7 +55,6 @@ class Impl {
       CommandLineOptions opts;
       auto rslt = getopt(
           args,
-          "init",      &opts.opt_init,
           "use",       &opts.opt_use,
           "list",      &opts.opt_list,
           "clone",     &opts.opt_clone,
