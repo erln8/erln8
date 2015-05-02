@@ -16,30 +16,7 @@ import utils;
 import builder;
 import impl;
 
-struct Erln8Options {
-  bool   opt_init      = false;
-  string opt_use       = null;
-  bool   opt_list      = false;
-  string opt_clone     = null;
-  string opt_fetch     = null;
-  bool   opt_build     = false;
-  string opt_repo      = null;
-  string opt_tag       = null;
-  string opt_id        = null;
-  string opt_config    = null;
-  bool   opt_show      = false;
-  bool   opt_prompt    = false;
-  bool   opt_configs   = false;
-  bool   opt_repos     = false;
-  bool   opt_link      = false;
-  bool   opt_unlink    = false;
-  bool   opt_force     = false;
-  bool   opt_nocolor   = false;
-  bool   opt_buildable = false;
-  bool   opt_debug     = false;
-}
-
-struct ErlangBuildOptions {
+struct RebarBuildOptions {
   string repo;
   string tag;
   string id;
@@ -49,80 +26,53 @@ struct ErlangBuildOptions {
 // executables to symlink to after a build is complete
 
 string[] bins = [
-  "bin/ct_run",
-  "bin/dialyzer",
-  "bin/epmd",
-  "bin/erl",
-  "bin/erlc",
-  "bin/escript",
-  "bin/run_erl",
-  "bin/run_test",
-  "bin/to_erl",
-  "bin/typer",
-  "lib/erlang/lib/diameter-*/bin/diameterc",
-  "lib/erlang/lib/edoc-*/priv/edoc_generate",
-  "lib/erlang/lib/erl_interface-*/bin/erl_call",
-  "lib/erlang/lib/inets-*/priv/bin/runcgi.sh",
-  "lib/erlang/lib/observer-*/priv/bin/cdv",
-  "lib/erlang/lib/observer-*/priv/bin/etop",
-  "lib/erlang/lib/odbc-*/priv/bin/odbcserver",
-  "lib/erlang/lib/os_mon-*/priv/bin/memsup",
-  "lib/erlang/lib/snmp-*/bin/snmpc",
-  "lib/erlang/lib/tools-*/bin/emem",
-  "lib/erlang/lib/webtool-*/priv/bin/start_webtool"
-  ];
+  "rebar"
+];
 
 
-  class Erln8Impl : Impl {
+class ReoImpl : Impl {
 
     this() {
-      name = "erln8";
-      commands = ["erlc"];
-      installbasedir = getConfigSubdir("otps");
-      repodir = getConfigSubdir("repos");
-      appConfigName = "config";
-      IdKey = "Erlangs";
+      IdKey = "Rebars";
+      name = "reo";
+      commands = ["rebar"];
+      installbasedir = getConfigSubdir("rebars");
+      repodir = getConfigSubdir("rebar_repos");
+      appConfigName = "reo_config";
+      IdKey = "Rebars";
     }
 
     override void initOnce() {
-      log_debug("Erln8 init once");
-      writeln("First time initialization of erln8");
+      log_debug("reo init once");
+      writeln("First time initialization of reo");
       mkdirSafe(getConfigDir());
-      mkdirSafe(buildNormalizedPath(getConfigDir(), "otps"));
-      mkdirSafe(buildNormalizedPath(getConfigDir(), "repos"));
+      mkdirSafe(buildNormalizedPath(getConfigDir(), "rebars"));
+      mkdirSafe(buildNormalizedPath(getConfigDir(), "rebar_repos"));
       // create ~/.erln8.d
       // create ~/.erln8.d/otps/
       // create ~/.erln8.d/repos/
 
       // create ~/.erln8.d/config file
-      File config = File(buildNormalizedPath(getConfigDir(), "config"), "w");
+      File config = File(buildNormalizedPath(getConfigDir(), "reo_config"), "w");
       config.writeln(q"EOS
-[Erln8]
+[Reo]
 default_config=default
 system_default=
 color=true
 
 [Repos]
-default=https://github.com/erlang/otp.git
+default=https://github.com/rebar/rebar.git
 
-[Erlangs]
+[Rebars]
 none=
 
 [Configs]
-osx_gcc=--disable-hipe --enable-smp-support --enable-threads --enable-kernel-poll --enable-darwin-64bit
-default=
-osx_llvm=--disable-hipe --enable-smp-support --enable-threads --enable-kernel-poll --enable-darwin-64bit
-osx_llvm_dtrace=--disable-hipe --enable-smp-support --enable-threads --enable-kernel-poll --enable-darwin-64bit --enable-vm-probes --with-dynamic-trace=dtrace
-osx_gcc_env=CC=gcc-4.2 CPPFLAGS='-DNDEBUG' MAKEFLAGS='-j 3'k
 EOS"
 );
-
       config.close();
       Ini cfg = getAppConfig();
       doClone(cfg, "default");
     }
-
-
 
     override string[] getSymlinkedExecutables() {
       string[] all = [];
@@ -135,29 +85,29 @@ EOS"
     void doShow(Ini cfg) {
       Nullable!Ini dirini = getConfigFromCWD();
       if(dirini.isNull) {
-        log_fatal("Can't find a configured version of Erlang");
+        log_fatal("Can't find a configured version of Rebar");
         exit(-1);
       }
 
-      log_debug("Erlang id:", dirini["Config"].getKey("Erlang"));
-      string erlid = dirini["Config"].getKey("Erlang");
-      if(!isValidErlang(cfg, erlid)) {
-        log_fatal("Unknown Erlang id: ", erlid);
+      log_debug("Rebar id:", dirini["Config"].getKey("Rebar"));
+      string rebarid = dirini["Config"].getKey("Rebar");
+      if(!isValidRebar(cfg, rebarid)) {
+        log_fatal("Unknown Rebar id: ", rebarid);
         exit(-1);
       }
       if(currentOpts.opt_show) {
-        writeln(erlid);
+        writeln(rebarid);
       } else {
-        write(erlid);
+        write(rebarid);
       }
     }
 
     void doUse(Ini cfg) {
-      auto keys = cfg["Erlangs"].keys();
+      auto keys = cfg[IdKey].keys();
       log_debug("Trying to use ", currentOpts.opt_use);
-      string erlangId = currentOpts.opt_use;
-      if(!(erlangId in keys)) {
-        writeln(erlangId, " is not a configured version of Erlang");
+      string rebarId = currentOpts.opt_use;
+      if(!(rebarId in keys)) {
+        writeln(rebarId, " is not a configured version of Rebar");
         exit(-1);
       }
       string fileName = "erln8.config";
@@ -168,31 +118,32 @@ EOS"
         }
       }
 
+      // TODO: append to file
       File file = File("erln8.config", "w");
       file.writeln("[Config]");
-      file.writeln("Erlang=", erlangId);
+      file.writeln("Rebar=", rebarId);
     }
 
-    bool isValidErlang(Ini ini, string id) {
-      return ini["Erlangs"].hasKey(id);
+ 
+    bool isValidRebar(Ini ini, string id) {
+      return ini[IdKey].hasKey(id);
     }
 
-
-    ErlangBuildOptions getBuildOptions(string repo, string tag, string id, string configname) {
-      ErlangBuildOptions opts;
+    RebarBuildOptions getBuildOptions(string repo, string tag, string id, string configname) {
+      RebarBuildOptions opts;
       opts.repo = (repo == null ? "default" : repo);
       opts.tag = tag;
       opts.id  = id;
-      // TODO: use Erlang.default_config value here
+      // TODO: use Rebar.default_config value here
       //opts.configname = (configname == null ? "default_config" : configname);
       opts.configname = configname;
       return opts;
     }
 
-    void verifyInputs(Ini cfg, ErlangBuildOptions build_options) {
-      auto erlangs = cfg["Erlangs"].keys();
-      if(build_options.id in erlangs) {
-        writeln("A version of Erlang already exists with the id ", build_options.id);
+    void verifyInputs(Ini cfg, RebarBuildOptions build_options) {
+      auto rebars = cfg[IdKey].keys();
+      if(build_options.id in rebars) {
+        writeln("A version of Rebar already exists with the id ", build_options.id);
         exit(-1);
       }
 
@@ -203,11 +154,11 @@ EOS"
       }
 
       string repoURL = cfg["Repos"].getKey(build_options.repo);
-      string repoPath = buildNormalizedPath(getConfigSubdir("repos"),build_options.repo);
+      string repoPath = buildNormalizedPath(getConfigSubdir(repodir),build_options.repo);
 
       if(!exists(repoPath)) {
         writeln("Missing repo for " ~ currentOpts.opt_fetch
-            ~ ", which should be in " ~ repoPath ~ ". Maybe you forgot to erln8 --clone <repo_name>");
+            ~ ", which should be in " ~ repoPath ~ ". Maybe you forgot to reo --clone <repo_name>");
         exit(-1);
       }
 
@@ -220,7 +171,7 @@ EOS"
 
     }
 
-    void checkObject(ErlangBuildOptions opts, string sourcePath) {
+    void checkObject(RebarBuildOptions opts, string sourcePath) {
       string checkObj = "cd " ~ sourcePath ~ " && git show-ref " ~ opts.tag ~ " > /dev/null";
       log_debug(checkObj);
       auto shell = executeShell(checkObj);
@@ -269,7 +220,7 @@ EOS"
     }
 
     void doBuild(Ini cfg) {
-      ErlangBuildOptions opts = getBuildOptions(currentOpts.opt_repo,
+      RebarBuildOptions opts = getBuildOptions(currentOpts.opt_repo,
           currentOpts.opt_tag,
           currentOpts.opt_id,
           currentOpts.opt_config);
@@ -278,7 +229,7 @@ EOS"
 
       string outputRoot = buildNormalizedPath(getConfigSubdir("otps"),opts.id);
       string outputPath = buildNormalizedPath(outputRoot, "dist");
-      string sourcePath = buildNormalizedPath(getConfigSubdir("repos"), opts.repo);
+      string sourcePath = buildNormalizedPath(getConfigSubdir(repodir), opts.repo);
 
       checkObject(opts, sourcePath);
       string makeBin = getMakeBin();
@@ -300,28 +251,13 @@ EOS"
       string cmd0 = format("%s cd %s && git archive %s | (cd %s; tar -f - -x)",
           env,  sourcePath,     opts.tag, tmp);
 
-      string cmd1 = format("%s cd %s && ./otp_build autoconf > ./build_log 2>&1",
+      string cmd1 = format("%s cd %s && ./bootstrap > ./build_log 2>&1",
           env, tmp);
-      string cmd2 = format("%s cd %s && ./configure --prefix=%s %s >> ./build_log 2>&1",
-          env, tmp, outputPath, ""); // TODO buildconfig
-
-      // TODO: configurable parallelism
-      string cmd3 = format("%s cd %s && %s -j4 >> ./build_log 2>&1",
-          env, tmp, makeBin);
-
-      string cmd4 = format("%s cd %s && %s install >> ./build_log 2>&1",
-          env, tmp, makeBin);
-
-      string cmd5 = format("%s cd %s && %s install-docs >> ./build_log 2>&1",
-          env, tmp, makeBin);
 
       Builder b = new Builder();
       b.addCommand("Copy source          ", cmd0);
-      b.addCommand("opt_build            ", cmd1);
-      b.addCommand("configure            ", cmd2);
-      b.addCommand("make                 ", cmd3);
-      b.addCommand("make install         ", cmd4);
-      b.addCommand("make install-docs    ", cmd4);
+      b.addCommand("bootstrap            ", cmd1);
+
       // TODO: build plt
       if(!b.run()) {
         writeln("*** Build failed ***");
@@ -330,8 +266,8 @@ EOS"
         wait(pid);
         return;
       }
-      log_debug("Adding Erlang id to ~/.erln8/config");
-      cfg["Erlangs"].setKey(opts.id, outputPath);
+      log_debug("Adding Rebar id to ~/.erln8/reo_config");
+      cfg[IdKey].setKey(opts.id, outputPath);
       saveAppConfig(cfg);
       setupLinks(outputRoot);
 
@@ -373,27 +309,27 @@ EOS"
 
       Nullable!Ini dirini = getConfigFromCWD();
       if(dirini.isNull) {
-        log_fatal("Can't find a configured version of Erlang");
+        log_fatal("Can't find a configured version of Rebar");
         exit(-1);
       }
 
-      log_debug("Erlang id:", dirini["Config"].getKey("Erlang"));
-      string erlid = dirini["Config"].getKey("Erlang");
-      if(!isValidErlang(cfg, erlid)) {
-        log_fatal("Unknown Erlang id: ", erlid);
+      log_debug("Rebar id:", dirini["Config"].getKey("Rebar"));
+      string rebarId = dirini["Config"].getKey("Rebar");
+      if(!isValidRebar(cfg, rebarId)) {
+        log_fatal("Unknown Rebar id: ", rebarId);
         exit(-1);
       }
       log_debug("installbasedir = ", installbasedir);
       log_debug("repodir = ", repodir);
 
-      string binFullPath = buildNormalizedPath(installbasedir, erlid, bin);
+      string binFullPath = buildNormalizedPath(installbasedir, rebarId, bin);
       log_debug("mapped cmd to execute = ", binFullPath);
       auto argsPassthrough = [bin] ~ cmdline[1 .. $];
       log_debug("Args = ", argsPassthrough);
       execv(binFullPath, argsPassthrough);
     }
 
-  }
+}
 
 
 

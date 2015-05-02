@@ -42,33 +42,5 @@ string getConfigDir() {
   return buildNormalizedPath(defaultHome(), ".erln8.d");
 }
 
-Ini getAppConfig() {
-  string cfgFileName = buildNormalizedPath(getConfigDir(), "config");
-  log_debug("Attempting to load ", cfgFileName);
-  if(!exists(cfgFileName)) {
-    log_fatal("erln8 has not been initialized");
-    exit(-1);
-  }
-  Ini ini = Ini.Parse(cfgFileName);
-  return ini;
-}
 
-void saveAppConfig(Ini cfg) {
-  string cfgFileName = buildNormalizedPath(getConfigDir(), "config");
-  log_debug("Attempting to save ", cfgFileName);
-  if(!exists(cfgFileName)) {
-    log_fatal("erln8 has not been initialized");
-    exit(-1);
-  }
-
-  File output = File(cfgFileName, "w");
-  foreach(section;cfg.sections) {
-    auto keys = cfg[section.name].keys();
-    output.writeln("[" ~ section.name ~ "]");
-    foreach(k,v;keys) {
-      output.writeln(k, "=", v);
-    }
-    output.writeln("");
-  }
-}
 

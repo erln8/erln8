@@ -18,9 +18,12 @@ import spinner;
 import log;
 import options;
 import impl;
-import erln8impl;
 import config;
 import dirconfig;
+
+import erln8impl;
+import reoimpl;
+
 
 string erln8_home;
 
@@ -39,18 +42,34 @@ void registerImpl(Impl i) {
 }
 
 
+void registerImpls() {
+  Erln8Impl e8 = new Erln8Impl();
+  registerImpl(e8);
+
+  ReoImpl reo = new ReoImpl();
+  registerImpl(reo);
+
+  if(!exists(getConfigDir())) {
+    // erln8 MUST go first
+    e8.initOnce();
+    reo.initOnce();
+  }
+}
+
+
 void main(string[] args) {
 
   //log_level = LogLevel.ERROR;
   log_debug("log_level = ", log_level);
 
-  log_debug("erln8 args:", args);
+  log_debug("args:", args);
   erln8_home = defaultHome();
   writeln("erln8 v2");
-  Erln8Impl e8 = new Erln8Impl();
-  registerImpl(e8);
-//  e8.initOnce();
+  registerImpls();
+  // TODO: initOnce!
+
   string binname = baseName(args[0]);
+  log_debug("binname = ", binname);
   if(binname in impls) {
     log_debug("Using config impl:", binname);
     Impl impl = impls[binname];

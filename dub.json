@@ -2,7 +2,11 @@
 	"name": "erln8",
 	"description": "A sneaky Erlang version manager.",
 	"copyright": "Copyright © 2015, dparfitt",
+  "license": "Apache-2.0",
 	"authors": ["Dave Parfitt <diparfitt@gmail.com>"],
 	"dependencies": {
-	}
+	},
+  "postBuildCommands": [
+      "cp erln8 reo"
+  ]
 }
