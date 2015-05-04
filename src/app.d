@@ -30,6 +30,7 @@ Impl[string] impls;
 Impl[string] implCommands;
 
 void registerImpl(Impl i) {
+  i.init();
   impls[i.name] = i;
   log_debug("Registering impl ", i.name);
   foreach(name; i.commands) {
@@ -48,11 +49,6 @@ void registerImpls() {
   ReoImpl reo = new ReoImpl();
   registerImpl(reo);
 
-  if(!exists(getConfigDir())) {
-    // erln8 MUST go first
-    e8.initOnce();
-    reo.initOnce();
-  }
 }
 
 

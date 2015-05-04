@@ -44,7 +44,12 @@ class ReoImpl : Impl {
 
     override void initOnce() {
       log_debug("reo init once");
-      writeln("First time initialization of reo");
+
+      if(exists(buildNormalizedPath(getConfigDir(), appConfigName))) {
+        log_debug("reo has already been initialized");
+        return;
+      }
+
       mkdirSafe(getConfigDir());
       mkdirSafe(buildNormalizedPath(getConfigDir(), "rebars"));
       mkdirSafe(buildNormalizedPath(getConfigDir(), "rebar_repos"));
@@ -219,6 +224,8 @@ EOS"
       }
     }
 
+
+    // TODO: NEEDS A SYSTEM DEFAULT IF ONE ISN'T SET
     void doBuild(Ini cfg) {
       RebarBuildOptions opts = getBuildOptions(currentOpts.opt_repo,
           currentOpts.opt_tag,
@@ -227,8 +234,8 @@ EOS"
 
       verifyInputs(cfg, opts);
 
-      string outputRoot = buildNormalizedPath(getConfigSubdir("otps"),opts.id);
-      string outputPath = buildNormalizedPath(outputRoot, "dist");
+      string outputRoot = buildNormalizedPath(getConfigSubdir(installbasedir),opts.id);
+      string outputPath = buildNormalizedPath(outputRoot);
       string sourcePath = buildNormalizedPath(getConfigSubdir(repodir), opts.repo);
 
       checkObject(opts, sourcePath);
@@ -247,16 +254,20 @@ EOS"
       log_debug("log = ", tmp);
 
       mkdirRecurse(tmp);
-
+      mkdirRecurse(outputPath);
       string cmd0 = format("%s cd %s && git archive %s | (cd %s; tar -f - -x)",
           env,  sourcePath,     opts.tag, tmp);
 
       string cmd1 = format("%s cd %s && ./bootstrap > ./build_log 2>&1",
           env, tmp);
 
+      string cmd2 = format("%s cd %s && cp ./rebar %s/rebar > ./build_log 2>&1",
+          env, tmp, outputPath);
+
       Builder b = new Builder();
       b.addCommand("Copy source          ", cmd0);
-      b.addCommand("bootstrap            ", cmd1);
+      b.addCommand("Bootstrap            ", cmd1);
+      b.addCommand("Install              ", cmd2);
 
       // TODO: build plt
       if(!b.run()) {
@@ -269,8 +280,6 @@ EOS"
       log_debug("Adding Rebar id to ~/.erln8/reo_config");
       cfg[IdKey].setKey(opts.id, outputPath);
       saveAppConfig(cfg);
-      setupLinks(outputRoot);
-
       writeln("Done!");
     }
 

@@ -116,6 +116,15 @@ class Impl {
   }
 
 
+  void init() {
+    if(exists(buildNormalizedPath(getConfigDir(), appConfigName))) {
+      log_debug(name ~ " has already been initialized");
+      return;
+    } else {
+      initOnce();
+    }
+  }
+
   void mkdirSafe(string d) {
     try {
       mkdir(d);

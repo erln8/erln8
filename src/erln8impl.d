@@ -67,6 +67,11 @@ string[] bins = [
     }
 
     override void initOnce() {
+      if(exists(buildNormalizedPath(getConfigDir(), appConfigName))) {
+        log_debug("Erln8 has already been initialized");
+        return;
+      }
+
       log_debug("Erln8 init once");
       writeln("First time initialization of erln8");
       mkdirSafe(getConfigDir());
