@@ -7,6 +7,7 @@ import std.getopt;
 import std.file;
 import std.format;
 import std.string;
+import std.algorithm.iteration;
 
 import config;
 import dirconfig;
@@ -54,7 +55,11 @@ string[] bins = [
 
     this() {
       name = "erln8";
-      commands = ["erlc"];
+      commands = [];
+      foreach(b;bins) {
+        commands ~= baseName(b);
+      }
+
       installbasedir = getConfigSubdir("otps");
       repodir = getConfigSubdir("repos");
       appConfigName = "config";

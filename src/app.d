@@ -69,6 +69,8 @@ void main(string[] args) {
 
   string binname = baseName(args[0]);
   log_debug("binname = ", binname);
+  log_debug(impls);
+  log_debug(implCommands);
   if(binname in impls) {
     log_debug("Using config impl:", binname);
     Impl impl = impls[binname];
