@@ -78,6 +78,7 @@ class Impl {
         );
     if(rslt.helpWanted) {
       defaultGetoptPrinter(name, rslt.options);
+      exit(0);
     }
     log_debug(opts);
     currentOpts = opts;

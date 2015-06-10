@@ -42,5 +42,14 @@ string getConfigDir() {
   return buildNormalizedPath(defaultHome(), ".erln8.d");
 }
 
-
+// used in testing
+string getDefaultOTPUrl() {
+  try {
+      string defaultUrl = environment["ERLN8_OTP_DEFAULT_URL"];
+      log_debug("Using ERLN8_OTP_DEFAULT_URL env var:", defaultUrl);
+      return defaultUrl;
+    } catch (Exception e) {
+      return "https://github.com/erlang/otp.git";
+    }
+}
 

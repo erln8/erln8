@@ -83,14 +83,16 @@ string[] bins = [
 
       // create ~/.erln8.d/config file
       File config = File(buildNormalizedPath(getConfigDir(), "config"), "w");
-      config.writeln(q"EOS
+      
+      //https://github.com/erlang/otp.git
+string cfgfileout = format("     
 [Erln8]
 default_config=default
 system_default=
 color=true
 
 [Repos]
-default=https://github.com/erlang/otp.git
+default=%s
 
 [Erlangs]
 none=
@@ -101,9 +103,9 @@ default=
 osx_llvm=--disable-hipe --enable-smp-support --enable-threads --enable-kernel-poll --enable-darwin-64bit
 osx_llvm_dtrace=--disable-hipe --enable-smp-support --enable-threads --enable-kernel-poll --enable-darwin-64bit --enable-vm-probes --with-dynamic-trace=dtrace
 osx_gcc_env=CC=gcc-4.2 CPPFLAGS='-DNDEBUG' MAKEFLAGS='-j 3'k
-EOS"
-);
+", getDefaultOTPUrl());
 
+      config.writeln(cfgfileout);
       config.close();
       Ini cfg = getAppConfig();
       doClone(cfg, "default");
