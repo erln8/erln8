@@ -7,12 +7,13 @@ setup() {
   mkdir -p ./testconfig
 }
 
+erln8_bin="../erln8"
+
+
 teardown() {
   echo "Test teardown"
   rm -rf ./testconfig
 }
-
-erln8_bin="../erln8"
 
 @test "Sanity check" {
   $erln8_bin --help
@@ -26,4 +27,17 @@ erln8_bin="../erln8"
     [ -e "./testconfig/.erln8.d/config" ]
     [ -e "./testconfig/.erln8.d/repos" ]
     [ -e "./testconfig/.erln8.d/otps" ]
+    # sanity check that the config content exists
+    [ `grep "color" ./testconfig/.erln8.d/config` = "color=true" ]
 }
+
+
+@test "erln8 remotes" {
+  result="$($erln8_bin --remote add foobar123 https://github.com/erln8/fake_otp2.git)"
+  [ `grep "foobar123" ./testconfig/.erln8.d/config | wc -l` = "1" ]
+
+  result="$($erln8_bin --remote remove foobar123)"
+  [ `grep "foobar123" ./testconfig/.erln8.d/config | wc -l` = "0" ]
+}
+
+

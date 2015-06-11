@@ -13,6 +13,8 @@ import dini;
 import log;
 import utils;
 
+enum RemoteOption { none, add, remove, show };
+
 struct CommandLineOptions {
   string opt_use       = null;
   bool   opt_list      = false;
@@ -33,6 +35,8 @@ struct CommandLineOptions {
   bool   opt_nocolor   = false;
   bool   opt_buildable = false;
   bool   opt_debug     = false;
+  RemoteOption opt_remote = RemoteOption.none;
+  string[] allargs;
 }
 
 class Impl {
@@ -58,6 +62,7 @@ class Impl {
       args,
       "use",       "Setup the current directory to use a specific verion of Erlang", &opts.opt_use,
       "list",      "List available Erlang installations",      &opts.opt_list,
+      "remote",    "add/delete/show remotes", &opts.opt_remote,
       "clone",     "Clone an Erlang source repository",  &opts.opt_clone,
       "fetch",     "Update source repos",  &opts.opt_fetch,
       "build",     "Build a specific version of OTP from source",  &opts.opt_build,
@@ -81,6 +86,7 @@ class Impl {
       exit(0);
     }
     log_debug(opts);
+    opts.allargs = args;
     currentOpts = opts;
   }
 
@@ -220,5 +226,50 @@ class Impl {
       wait(pid);
   }
 
-}
+  void doRemote(Ini cfg) {
+      if(currentOpts.opt_remote == RemoteOption.show) {
+          auto keys = cfg["Repos"].keys();
+          foreach(k,v;keys) {
+            writeln(k, " -> ", v);
+          }
+          exit(0);
+        }
 
+      if(currentOpts.opt_remote == RemoteOption.add ||
+         currentOpts.opt_remote == RemoteOption.remove) {
+        // processing the args removes them from the array
+        
+         if(currentOpts.opt_remote == RemoteOption.add) {
+          if(currentOpts.allargs.length != 3) {
+            writeln("Invalid arguments specified");
+            exit(-1);
+          }
+        
+          string name = currentOpts.allargs[$-2];
+          string url  = currentOpts.allargs[$-1];
+          writeln("Adding remote ", name, " -> ", url);
+          cfg["Repos"].setKey(name, url);
+          saveAppConfig(cfg);  
+          exit(0);
+        } else if(currentOpts.opt_remote == RemoteOption.remove) {
+          if(currentOpts.allargs.length != 2) {
+            writeln("Invalid arguments specified");
+            exit(-1);
+          }
+
+          string name = currentOpts.allargs[$-1];
+          cfg["Repos"].removeKey(name);
+          writeln("Removing remote ", name);
+          saveAppConfig(cfg);            
+          exit(0);
+        }
+
+
+      }
+      
+      //string currentRepoDir = buildNormalizedPath(repodir
+      //cfg["Erlangs"].setKey(opts.id, outputPath);
+      //saveAppConfig(cfg);
+  }
+
+}

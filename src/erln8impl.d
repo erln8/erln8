@@ -349,6 +349,8 @@ osx_gcc_env=CC=gcc-4.2 CPPFLAGS='-DNDEBUG' MAKEFLAGS='-j 3'k
         doFetch(cfg);
       } else if(currentOpts.opt_build) {
         doBuild(cfg);
+      } else if(currentOpts.opt_remote != RemoteOption.none) {
+        doRemote(cfg);
       } else {
         log_debug("Nothing to do");
       }
