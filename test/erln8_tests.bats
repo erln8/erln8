@@ -41,3 +41,34 @@ teardown() {
 }
 
 
+@test "erln8 clone" {
+  [ ! -e "./testconfig/.erln8.d/repos/foobar123" ]
+
+  result="$($erln8_bin --remote add foobar123 https://github.com/erln8/fake_otp.git)"
+  result="$($erln8_bin --clone foobar123)"
+  [ -e "./testconfig/.erln8.d/repos/foobar123" ]
+  [ -e "./testconfig/.erln8.d/repos/foobar123/.git" ]
+}
+
+@test "erln8 clone invalid" {
+  [ ! -e "./testconfig/.erln8.d/repos/foobar123" ]
+
+  run ../erln8 --clone foobar456
+  [ "$status" -ne 0 ]
+  [ ! -e "./testconfig/.erln8.d/repos/foobar456" ] 
+}
+
+
+@test "erln8 fetch" {
+  result="$($erln8_bin --remote add foobar123 https://github.com/erln8/fake_otp.git)"
+  result="$($erln8_bin --clone foobar123)"
+  run $erln8_bin --fetch foobar123
+  [ "$status" -eq 0 ]  
+}
+
+
+@test "erln8 fetch invalid repo" {
+  # foobar456 does not exist
+  run $erln8_bin --fetch foobar456
+  [ "$status" -ne 0 ]  
+}
