@@ -66,9 +66,7 @@ void main(string[] args) {
   erln8_home = defaultHome();
   writeln("erln8 v2");
   registerImpls();
-
-
-
+  
   string binname = baseName(args[0]);
   log_debug("binname = ", binname);
   log_debug(impls);
@@ -77,13 +75,13 @@ void main(string[] args) {
     log_debug("Using config impl:", binname);
     Impl impl = impls[binname];
     impl.processArgs(args);
-    initImpls();
+    impl.init();
     impl.runConfig();
   } else if(binname in implCommands) {
     log_debug("Using command impl:", binname);
     Impl impl = implCommands[binname];
     impl.processArgs(args);
-    initImpls();
+    impl.init();
     impl.runCommand(args);
   } else {
     log_fatal("Unknown command: ", binname);

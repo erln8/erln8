@@ -106,7 +106,10 @@ osx_gcc_env=CC=gcc-4.2 CPPFLAGS='-DNDEBUG' MAKEFLAGS='-j 3'k
 ", getDefaultOTPUrl());
 
       config.writeln(cfgfileout);
-      config.close();
+      config.close();      
+
+      setupBins();
+
       Ini cfg = getAppConfig();
       doClone(cfg, "default");
     }

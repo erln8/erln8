@@ -90,6 +90,15 @@ class Impl {
     currentOpts = opts;
   }
 
+  void setupBins() {
+      auto binPath = buildNormalizedPath(getConfigDir(), "bin");
+      writeln("PLEASE ADD ", binPath, " TO YOUR PATH");
+      mkdirSafe(binPath);
+      foreach(bin;getSymlinkedExecutables()) {
+          auto linkTo = buildNormalizedPath(binPath, baseName(bin));
+          symlink(thisExePath(), linkTo);
+      }
+  }
 
 
   Ini getAppConfig() {
@@ -159,7 +168,7 @@ class Impl {
 
       string currentRepoDir = buildNormalizedPath(repodir, k);
       log_debug(currentRepoDir);
-      string cmd = "cd " ~ currentRepoDir ~ " && git tag | sort";
+      string cmd = "cd " ~ currentRepoDir ~ " && git tag | sort | pr -3 -t";
       log_debug(cmd);
       auto pid = spawnShell(cmd);
       wait(pid);
