@@ -7,6 +7,7 @@ import std.process;
 import std.format;
 import std.string;
 import std.getopt;
+import colorize : fg, color, cwrite, cwriteln;
 
 import config;
 import dini;
@@ -98,14 +99,15 @@ class Impl {
 
   void setupBins() {
       auto binPath = buildNormalizedPath(getConfigDir(), "bin");
-      writeln("PLEASE ADD ", binPath, " TO YOUR PATH");
+      string msg = ("PLEASE ADD " ~ binPath ~ " TO YOUR PATH").color(fg.red);
+      cwriteln(msg);
       mkdirSafe(binPath);
       foreach(bin;getSymlinkedExecutables()) {
           auto linkTo = buildNormalizedPath(binPath, baseName(bin));
           try {
             symlink(thisExePath(), linkTo);
             } catch (Exception e) {
-              writeln(e.msg);
+              writeln("Could not link: ", e.msg, ". Ok to continue.");
             }
       }
   }

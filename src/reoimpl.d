@@ -71,7 +71,6 @@ color=true
 default=https://github.com/rebar/rebar.git
 
 [Rebars]
-none=
 
 [Configs]
 EOS"

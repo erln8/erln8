@@ -60,18 +60,18 @@ void initImpls() {
 
 void main(string[] args) {
 
-  log_level = LogLevel.ERROR;
+  log_level = LogLevel.DEBUG;
   log_debug("log_level = ", log_level);
 
   log_debug("args:", args);
   erln8_home = defaultHome();
-  cwriteln("erln8 v2".color(fg.blue));
   registerImpls();
   string binname = baseName(args[0]);
   log_debug("binname = ", binname);
   log_debug(impls);
   log_debug(implCommands);
   if(binname in impls) {
+    cwriteln(args[0] ~ " v2".color(fg.blue));
     log_debug("Using config impl:", binname);
     Impl impl = impls[binname];
     impl.processArgs(args);
