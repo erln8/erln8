@@ -58,37 +58,42 @@ class Impl {
 
   void processArgs(string[] args) {
     CommandLineOptions opts;
-    auto rslt = getopt(
-      args,
-       std.getopt.config.passThrough,
-      "use",       "Setup the current directory to use a specific verion of Erlang", &opts.opt_use,
-      "list",      "List available Erlang installations",      &opts.opt_list,
-      "remote",    "add/delete/show remotes", &opts.opt_remote,
-      "clone",     "Clone an Erlang source repository",  &opts.opt_clone,
-      "fetch",     "Update source repos",  &opts.opt_fetch,
-      "build",     "Build a specific version of OTP from source",  &opts.opt_build,
-      "repo",      "Specifies repo name to build from",  &opts.opt_repo,
-      "tag",       "Specifies repo branch/tag to build fro,",  &opts.opt_tag,
-      "id",        "A user assigned name for a version of Erlang",  &opts.opt_id,
-      "config",    "Build configuration",  &opts.opt_config,
-      "show",      "Show the configured version of Erlang in the current working directory",  &opts.opt_show,
-      "prompt",    "Display the version of Erlang configured for this part of the directory tree",  &opts.opt_prompt,
-      "configs",   "List build configs",  &opts.opt_configs,
-      "repos",     "List build repos",  &opts.opt_repos,
-      "link",      "Link a non-erln8 build of Erlang to erln8",  &opts.opt_link,
-      "unlink",    "Unlink a non-erln8 build of Erlang from erln8",  &opts.opt_unlink,
-      "force",     "Overwrite an erln8.config in the current directory",  &opts.opt_force,
-      "nocolor",   "Don't use color output",  &opts.opt_nocolor,
-      "buildable", "List tags to build from configured source repos", &opts.opt_buildable,
-      "debug",     "Show debug output", &opts.opt_debug
-        );
-    if(rslt.helpWanted) {
-      defaultGetoptPrinter(name, rslt.options);
-      exit(0);
-    }
-    log_debug(opts);
-    opts.allargs = args;
-    currentOpts = opts;
+    try {
+      auto rslt = getopt(
+        args,
+         std.getopt.config.passThrough,
+        "use",       "Setup the current directory to use a specific verion of Erlang", &opts.opt_use,
+        "list",      "List available Erlang installations",      &opts.opt_list,
+        "remote",    "add/delete/show remotes", &opts.opt_remote,
+        "clone",     "Clone an Erlang source repository",  &opts.opt_clone,
+        "fetch",     "Update source repos",  &opts.opt_fetch,
+        "build",     "Build a specific version of OTP from source",  &opts.opt_build,
+        "repo",      "Specifies repo name to build from",  &opts.opt_repo,
+        "tag",       "Specifies repo branch/tag to build fro,",  &opts.opt_tag,
+        "id",        "A user assigned name for a version of Erlang",  &opts.opt_id,
+        "config",    "Build configuration",  &opts.opt_config,
+        "show",      "Show the configured version of Erlang in the current working directory",  &opts.opt_show,
+        "prompt",    "Display the version of Erlang configured for this part of the directory tree",  &opts.opt_prompt,
+        "configs",   "List build configs",  &opts.opt_configs,
+        "repos",     "List build repos",  &opts.opt_repos,
+        "link",      "Link a non-erln8 build of Erlang to erln8",  &opts.opt_link,
+        "unlink",    "Unlink a non-erln8 build of Erlang from erln8",  &opts.opt_unlink,
+        "force",     "Overwrite an erln8.config in the current directory",  &opts.opt_force,
+        "nocolor",   "Don't use color output",  &opts.opt_nocolor,
+        "buildable", "List tags to build from configured source repos", &opts.opt_buildable,
+        "debug",     "Show debug output", &opts.opt_debug
+          );
+      if(rslt.helpWanted) {
+        defaultGetoptPrinter(name, rslt.options);
+        exit(0);
+      }
+      log_debug(opts);
+      opts.allargs = args;
+      currentOpts = opts;
+      } catch (Exception e) {
+        writeln(e.msg);
+        exit(-1);
+      }
   }
 
   void setupBins() {
