@@ -83,9 +83,9 @@ string[] bins = [
 
       // create ~/.erln8.d/config file
       File config = File(buildNormalizedPath(getConfigDir(), "config"), "w");
-      
+
       //https://github.com/erlang/otp.git
-string cfgfileout = format("     
+string cfgfileout = format("
 [Erln8]
 default_config=default
 system_default=
@@ -95,18 +95,17 @@ color=true
 default=%s
 
 [Erlangs]
-none=
 
 [Configs]
-osx_gcc=--disable-hipe --enable-smp-support --enable-threads --enable-kernel-poll --enable-darwin-64bit
 default=
+osx_gcc=--disable-hipe --enable-smp-support --enable-threads --enable-kernel-poll --enable-darwin-64bit
 osx_llvm=--disable-hipe --enable-smp-support --enable-threads --enable-kernel-poll --enable-darwin-64bit
 osx_llvm_dtrace=--disable-hipe --enable-smp-support --enable-threads --enable-kernel-poll --enable-darwin-64bit --enable-vm-probes --with-dynamic-trace=dtrace
 osx_gcc_env=CC=gcc-4.2 CPPFLAGS='-DNDEBUG' MAKEFLAGS='-j 3'k
 ", getDefaultOTPUrl());
 
       config.writeln(cfgfileout);
-      config.close();      
+      config.close();
 
       setupBins();
 
@@ -174,7 +173,9 @@ osx_gcc_env=CC=gcc-4.2 CPPFLAGS='-DNDEBUG' MAKEFLAGS='-j 3'k
       ErlangBuildOptions opts;
       opts.repo = (repo == null ? "default" : repo);
       opts.tag = tag;
-      opts.id  = id;
+      if(id == null) {
+        opts.id  = tag;
+      }
       // TODO: use Erlang.default_config value here
       //opts.configname = (configname == null ? "default_config" : configname);
       opts.configname = configname;
@@ -326,8 +327,22 @@ osx_gcc_env=CC=gcc-4.2 CPPFLAGS='-DNDEBUG' MAKEFLAGS='-j 3'k
       cfg["Erlangs"].setKey(opts.id, outputPath);
       saveAppConfig(cfg);
       setupLinks(outputRoot);
-
+      setSystemDefaultIfFirst(opts.id);
       writeln("Done!");
+    }
+
+
+    void setSystemDefaultIfFirst(string id) {
+      Ini cfg = getAppConfig();
+      IniSection e8cfg = cfg.getSection("Erln8");
+      if(e8cfg.hasKey("system_default") && e8cfg.getKey("system_default") == null ) {
+        write("A system default hasn't been set. Would you like to use ", id, " as the system default? (y/N) ");
+        string line = readln();
+        if(line.toLower().strip() == "y") {
+          e8cfg.setKey("system_default", id);
+          saveAppConfig(cfg);
+        }
+      }
     }
 
     override void runConfig() {

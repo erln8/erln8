@@ -5,6 +5,7 @@
   "license": "Apache-2.0",
 	"authors": ["Dave Parfitt <diparfitt@gmail.com>"],
 	"dependencies": {
+    "colorize": "~>1.0.5"
 	},
   "postBuildCommands": [
       "cp erln8 reo"
