@@ -1,6 +1,7 @@
 import std.path;
 import std.file;
 import std.typecons; // Nullable
+import colorize : fg, color, cwriteln, cwritefln;
 
 import dini;
 import log;
@@ -22,7 +23,8 @@ Nullable!Ini getDirConfig(string path) {
   string cfgFileName = buildNormalizedPath(path, "erln8.config");
   log_debug("Looking for config ", cfgFileName);
   if(exists(cfgFileName)) {
-    log_debug("Found!");
+    
+    cwriteln("erln8 directory config ".color(fg.yellow), cfgFileName.color(fg.yellow));
     Ini ini = Ini.Parse(cfgFileName);
     Nullable!Ini result;
     result = ini;

@@ -13,6 +13,7 @@ import std.file; // exists()
 import std.string;
 
 import dini; // ini parser
+import colorize : fg, color, cwriteln, cwritefln;
 
 import spinner;
 import log;
@@ -64,9 +65,8 @@ void main(string[] args) {
 
   log_debug("args:", args);
   erln8_home = defaultHome();
-  writeln("erln8 v2");
+  cwriteln("erln8 v2".color(fg.blue));
   registerImpls();
-  
   string binname = baseName(args[0]);
   log_debug("binname = ", binname);
   log_debug(impls);
