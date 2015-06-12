@@ -173,8 +173,10 @@ osx_gcc_env=CC=gcc-4.2 CPPFLAGS='-DNDEBUG' MAKEFLAGS='-j 3'k
       ErlangBuildOptions opts;
       opts.repo = (repo == null ? "default" : repo);
       opts.tag = tag;
-      if(id == null) {
-        opts.id  = tag;
+      if(opts.id == null) {
+        opts.id  = tag;    
+      } else {
+        opts.id  = id;    
       }
       // TODO: use Erlang.default_config value here
       //opts.configname = (configname == null ? "default_config" : configname);
@@ -327,23 +329,23 @@ osx_gcc_env=CC=gcc-4.2 CPPFLAGS='-DNDEBUG' MAKEFLAGS='-j 3'k
       cfg["Erlangs"].setKey(opts.id, outputPath);
       saveAppConfig(cfg);
       setupLinks(outputRoot);
-      setSystemDefaultIfFirst(opts.id);
+      setSystemDefaultIfFirst("Erln8", opts.id);
       writeln("Done!");
     }
 
 
-    void setSystemDefaultIfFirst(string id) {
-      Ini cfg = getAppConfig();
-      IniSection e8cfg = cfg.getSection("Erln8");
-      if(e8cfg.hasKey("system_default") && e8cfg.getKey("system_default") == null ) {
-        write("A system default hasn't been set. Would you like to use ", id, " as the system default? (y/N) ");
-        string line = readln();
-        if(line.toLower().strip() == "y") {
-          e8cfg.setKey("system_default", id);
-          saveAppConfig(cfg);
-        }
-      }
-    }
+    //void setSystemDefaultIfFirst(string id) {
+    //  Ini cfg = getAppConfig();
+    //  IniSection e8cfg = cfg.getSection("Erln8");
+    //  if(e8cfg.hasKey("system_default") && e8cfg.getKey("system_default") == null ) {
+    //    write("A system default hasn't been set. Would you like to use ", id, " as the system default? (y/N) ");
+    //    string line = readln();
+    //    if(line.toLower().strip() == "y") {
+    //      e8cfg.setKey("system_default", id);
+    //      saveAppConfig(cfg);
+    //    }
+    //  }
+    //}
 
     override void runConfig() {
       // TODO: this has to go after init
@@ -380,14 +382,24 @@ osx_gcc_env=CC=gcc-4.2 CPPFLAGS='-DNDEBUG' MAKEFLAGS='-j 3'k
       log_debug("Running: ", cmdline);
       string bin = baseName(cmdline[0]);
 
+      
+
       Nullable!Ini dirini = getConfigFromCWD();
+      string erlid;
       if(dirini.isNull) {
-        log_fatal("Can't find a configured version of Erlang");
-        exit(-1);
+        IniSection e8cfg = cfg.getSection("Erln8");
+        if(e8cfg.hasKey("system_default") && e8cfg.getKey("system_default") != null ) {
+          log_debug("Using system_default ", e8cfg.getKey("system_default"));
+          erlid = e8cfg.getKey("system_default");
+        } else {
+          log_fatal("Can't find a configured version of Erlang");
+          exit(-1);
+        }
+      } else {
+        erlid = dirini["Config"].getKey("Erlang");  
+        log_debug("Erlang id:", dirini["Config"].getKey("Erlang"));
       }
 
-      log_debug("Erlang id:", dirini["Config"].getKey("Erlang"));
-      string erlid = dirini["Config"].getKey("Erlang");
       if(!isValidErlang(cfg, erlid)) {
         log_fatal("Unknown Erlang id: ", erlid);
         exit(-1);
@@ -403,6 +415,3 @@ osx_gcc_env=CC=gcc-4.2 CPPFLAGS='-DNDEBUG' MAKEFLAGS='-j 3'k
     }
 
   }
-
-
-

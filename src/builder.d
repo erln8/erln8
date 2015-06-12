@@ -2,6 +2,8 @@ import std.process;
 import std.stdio;
 import std.format;
 
+import colorize : fg, color, cwrite, cwriteln;
+
 import spinner;
 import log;
 
@@ -21,8 +23,9 @@ class Builder {
     foreach(bc;cmds) {
       SlowSpinner spinner = new SlowSpinner();
       log_debug("Running: ", bc.cmd);
-      write(format("[%d] %s ", i, bc.desc));
 
+      //write(format("[%d] %s ", i, bc.desc));
+      cwrite(format("[".color(fg.white) ~ "%d".color(fg.yellow) ~ "]".color(fg.white) ~ " %s ".color(fg.light_blue), i, bc.desc));
       spinner.start();
       auto p = executeShell(bc.cmd);
       spinner.stop();

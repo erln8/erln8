@@ -1,5 +1,6 @@
 import std.stdio;
 import core.thread;
+import colorize : fg, color, cwrite;
 
 class SlowSpinner : Spinner {
   this() {

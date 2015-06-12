@@ -60,6 +60,7 @@ class Impl {
     CommandLineOptions opts;
     auto rslt = getopt(
       args,
+       std.getopt.config.passThrough,
       "use",       "Setup the current directory to use a specific verion of Erlang", &opts.opt_use,
       "list",      "List available Erlang installations",      &opts.opt_list,
       "remote",    "add/delete/show remotes", &opts.opt_remote,
@@ -96,7 +97,11 @@ class Impl {
       mkdirSafe(binPath);
       foreach(bin;getSymlinkedExecutables()) {
           auto linkTo = buildNormalizedPath(binPath, baseName(bin));
-          symlink(thisExePath(), linkTo);
+          try {
+            symlink(thisExePath(), linkTo);
+            } catch (Exception e) {
+              writeln(e.msg);
+            }
       }
   }
 
@@ -281,4 +286,18 @@ class Impl {
       //saveAppConfig(cfg);
   }
 
+
+
+  void setSystemDefaultIfFirst(string section, string id) {
+      Ini cfg = getAppConfig();
+      IniSection e8cfg = cfg.getSection(section);
+      if(e8cfg.hasKey("system_default") && e8cfg.getKey("system_default") == null ) {
+        write("A system default hasn't been set. Would you like to use ", id, " as the system default? (y/N) ");
+        string line = readln();
+        if(line.toLower().strip() == "y") {
+          e8cfg.setKey("system_default", id);
+          saveAppConfig(cfg);
+        }
+      }
+    }
 }

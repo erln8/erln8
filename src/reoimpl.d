@@ -31,6 +31,7 @@ string[] bins = [
 
 
 class ReoImpl : Impl {
+    string reosectionname; // [Reo] or [Reo3] in the reo_config file
 
     this() {
       IdKey = "Rebars";
@@ -40,6 +41,7 @@ class ReoImpl : Impl {
       repodir = getConfigSubdir("rebar_repos");
       appConfigName = "reo_config";
       IdKey = "Rebars";
+      reosectionname = "Reo";
     }
 
     override void initOnce() {
@@ -75,6 +77,9 @@ none=
 EOS"
 );
       config.close();
+    
+      setupBins();
+
       Ini cfg = getAppConfig();
       doClone(cfg, "default");
     }
@@ -138,7 +143,13 @@ EOS"
       RebarBuildOptions opts;
       opts.repo = (repo == null ? "default" : repo);
       opts.tag = tag;
-      opts.id  = id;
+      
+      if(opts.id == null) {
+        opts.id  = tag;    
+      } else {
+        opts.id  = id;    
+      }
+
       // TODO: use Rebar.default_config value here
       //opts.configname = (configname == null ? "default_config" : configname);
       opts.configname = configname;
@@ -280,6 +291,7 @@ EOS"
       log_debug("Adding Rebar id to ~/.erln8/reo_config");
       cfg[IdKey].setKey(opts.id, outputPath);
       saveAppConfig(cfg);
+      setSystemDefaultIfFirst("Reo", opts.id);
       writeln("Done!");
     }
 
@@ -317,13 +329,22 @@ EOS"
       string bin = baseName(cmdline[0]);
 
       Nullable!Ini dirini = getConfigFromCWD();
+      string rebarId;
+
       if(dirini.isNull) {
-        log_fatal("Can't find a configured version of Rebar");
-        exit(-1);
+        IniSection e8cfg = cfg.getSection(reosectionname);
+        if(e8cfg.hasKey("system_default") && e8cfg.getKey("system_default") != null ) {
+          log_debug("Using system_default ", e8cfg.getKey("system_default"));
+          rebarId = e8cfg.getKey("system_default");
+        } else {
+          log_fatal("Can't find a configured version of Rebar");
+          exit(-1);
+        }
+      } else {
+         rebarId = dirini["Config"].getKey("Rebar");
+         log_debug("Rebar id:", dirini["Config"].getKey("Rebar"));
       }
 
-      log_debug("Rebar id:", dirini["Config"].getKey("Rebar"));
-      string rebarId = dirini["Config"].getKey("Rebar");
       if(!isValidRebar(cfg, rebarId)) {
         log_fatal("Unknown Rebar id: ", rebarId);
         exit(-1);
