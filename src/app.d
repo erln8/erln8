@@ -90,16 +90,5 @@ void main(string[] args) {
 
 }
 
-//  try {
-//     getOptions(args);
-//
-//  } catch(GetOptException e) {
-//    log_fatal(e.msg);
-//    exit(-1);
-//  }
-//  if (helpInformation.helpWanted) {
-//      writeln("erln8",
-//        helpInformation.options);
-//    }
 
 
