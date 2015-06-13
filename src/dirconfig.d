@@ -29,7 +29,7 @@ DirconfigResult getDirConfig(string path) {
   string cfgFileName = buildNormalizedPath(path, "erln8.config");
   log_debug("Looking for config ", cfgFileName);
   if(exists(cfgFileName)) {
-    cwriteln("erln8 directory config ".color(fg.yellow), cfgFileName.color(fg.yellow));
+    //cwriteln("erln8 directory config ".color(fg.yellow), cfgFileName.color(fg.yellow));
     Ini ini = Ini.Parse(cfgFileName);
     Nullable!Ini result;
     result = ini;
@@ -57,7 +57,7 @@ DirconfigResult getDirConfig(string key, string path) {
     Ini ini = Ini.Parse(cfgFileName);
     IniSection cfgini = ini.getSection("Config");
     if(cfgini.hasKey(key)) {
-      cwriteln("erln8 directory config ".color(fg.yellow), cfgFileName.color(fg.yellow));
+      //cwriteln("erln8 directory config ".color(fg.yellow), cfgFileName.color(fg.yellow));
       Nullable!Ini result;
       result = ini;
       return new DirconfigResult(result, cfgFileName);
