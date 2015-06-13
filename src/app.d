@@ -23,6 +23,7 @@ import dirconfig;
 
 import erln8impl;
 import reoimpl;
+import reo3impl;
 
 
 string erln8_home;
@@ -49,6 +50,8 @@ void registerImpls() {
   ReoImpl reo = new ReoImpl();
   registerImpl(reo);
 
+  Reo3Impl reo3 = new Reo3Impl();
+  registerImpl(reo3);
 }
 
 void initImpls() {

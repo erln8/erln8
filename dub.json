@@ -8,6 +8,7 @@
     "colorize": "~>1.0.5"
 	},
   "postBuildCommands": [
-      "cp erln8 reo"
+      "cp erln8 reo",
+      "cp erln8 reo3"
   ]
 }
