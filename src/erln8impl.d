@@ -84,6 +84,7 @@ string[] bins = [
       // create ~/.erln8.d/config file
       File config = File(buildNormalizedPath(getConfigDir(), "config"), "w");
 
+      // none must be left in!
       //https://github.com/erlang/otp.git
 string cfgfileout = format("
 [Erln8]
@@ -95,6 +96,7 @@ color=true
 default=%s
 
 [Erlangs]
+none=
 
 [Configs]
 default=
@@ -124,7 +126,8 @@ osx_gcc_env=CC=gcc-4.2 CPPFLAGS='-DNDEBUG' MAKEFLAGS='-j 3'k
     }
 
     void doShow(Ini cfg) {
-      Nullable!Ini dirini = getConfigFromCWD();
+      DirconfigResult dcr = getConfigFromCWD();
+      auto dirini = dcr.ini;
       if(dirini.isNull) {
         log_fatal("Can't find a configured version of Erlang");
         exit(-1);
@@ -158,10 +161,19 @@ osx_gcc_env=CC=gcc-4.2 CPPFLAGS='-DNDEBUG' MAKEFLAGS='-j 3'k
           exit(-1);
         }
       }
-
-      File file = File("erln8.config", "w");
-      file.writeln("[Config]");
-      file.writeln("Erlang=", erlangId);
+      if(currentOpts.opt_force) {
+        // update the existing file
+        DirconfigResult dcr = getConfigFromCWD();
+        auto dircfg = dcr.ini;
+        IniSection inicfg = dircfg.get().getSection("Config");
+        inicfg.setKey("Erlang", erlangId);
+        saveDirConfig(dcr.path, dcr.ini);
+      } else {
+        // write a new file
+        File file = File("erln8.config", "w");
+        file.writeln("[Config]");
+        file.writeln("Erlang=", erlangId);
+      }
     }
 
     bool isValidErlang(Ini ini, string id) {
@@ -382,9 +394,8 @@ osx_gcc_env=CC=gcc-4.2 CPPFLAGS='-DNDEBUG' MAKEFLAGS='-j 3'k
       log_debug("Running: ", cmdline);
       string bin = baseName(cmdline[0]);
 
-      
-
-      Nullable!Ini dirini = getConfigFromCWD();
+      DirconfigResult dcr = getConfigFromCWD("Erlang");
+      auto dirini = dcr.ini;
       string erlid;
       if(dirini.isNull) {
         IniSection e8cfg = cfg.getSection("Erln8");
@@ -396,7 +407,7 @@ osx_gcc_env=CC=gcc-4.2 CPPFLAGS='-DNDEBUG' MAKEFLAGS='-j 3'k
           exit(-1);
         }
       } else {
-        erlid = dirini["Config"].getKey("Erlang");  
+        erlid = dirini["Config"].getKey("Erlang");
         log_debug("Erlang id:", dirini["Config"].getKey("Erlang"));
       }
 

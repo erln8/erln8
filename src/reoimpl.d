@@ -40,7 +40,6 @@ class ReoImpl : Impl {
       installbasedir = getConfigSubdir("rebars");
       repodir = getConfigSubdir("rebar_repos");
       appConfigName = "reo_config";
-      IdKey = "Rebars";
       reosectionname = "Reo";
     }
 
@@ -61,6 +60,7 @@ class ReoImpl : Impl {
 
       // create ~/.erln8.d/config file
       File config = File(buildNormalizedPath(getConfigDir(), "reo_config"), "w");
+      // "none" must be left in, otherwise the section will be empty
       config.writeln(q"EOS
 [Reo]
 default_config=default
@@ -71,12 +71,13 @@ color=true
 default=https://github.com/rebar/rebar.git
 
 [Rebars]
+none =
 
 [Configs]
 EOS"
 );
       config.close();
-    
+
       setupBins();
 
       Ini cfg = getAppConfig();
@@ -92,7 +93,8 @@ EOS"
     }
 
     void doShow(Ini cfg) {
-      Nullable!Ini dirini = getConfigFromCWD();
+      DirconfigResult dcr = getConfigFromCWD("Rebar");
+      auto dirini = dcr.ini;
       if(dirini.isNull) {
         log_fatal("Can't find a configured version of Rebar");
         exit(-1);
@@ -127,10 +129,20 @@ EOS"
         }
       }
 
-      // TODO: append to file
-      File file = File("erln8.config", "w");
-      file.writeln("[Config]");
-      file.writeln("Rebar=", rebarId);
+      if(currentOpts.opt_force) {
+        // update the existing file
+        DirconfigResult dcr = getConfigFromCWD();
+        auto dircfg = dcr.ini;
+        IniSection inicfg = dircfg.get().getSection("Config");
+        inicfg.setKey("Rebar", rebarId);
+        saveDirConfig(dcr.path, dcr.ini);
+      } else {
+        // write a new file
+        File file = File("erln8.config", "w");
+        file.writeln("[Config]");
+        file.writeln("Rebar=", rebarId);
+      }
+
     }
 
 
@@ -142,11 +154,11 @@ EOS"
       RebarBuildOptions opts;
       opts.repo = (repo == null ? "default" : repo);
       opts.tag = tag;
-      
+
       if(opts.id == null) {
-        opts.id  = tag;    
+        opts.id  = tag;
       } else {
-        opts.id  = id;    
+        opts.id  = id;
       }
 
       // TODO: use Rebar.default_config value here
@@ -327,7 +339,8 @@ EOS"
       log_debug("Running: ", cmdline);
       string bin = baseName(cmdline[0]);
 
-      Nullable!Ini dirini = getConfigFromCWD();
+      DirconfigResult dcr = getConfigFromCWD();
+      auto dirini = dcr.ini;
       string rebarId;
 
       if(dirini.isNull) {

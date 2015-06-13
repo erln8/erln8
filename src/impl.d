@@ -143,6 +143,18 @@ class Impl {
     }
   }
 
+  void saveDirConfig(string path, Ini cfg) {
+    File output = File(path, "w");
+    foreach(section;cfg.sections) {
+      auto keys = cfg[section.name].keys();
+      output.writeln("[" ~ section.name ~ "]");
+      foreach(k,v;keys) {
+        output.writeln(k, "=", v);
+      }
+      output.writeln("");
+    }
+  }
+
 
   void init() {
     if(exists(buildNormalizedPath(getConfigDir(), appConfigName))) {
@@ -191,7 +203,8 @@ class Impl {
     auto keys = cfg[IdKey].keys();
     log_debug(keys);
     foreach(k,v;keys) {
-      writeln(k, " -> ", v);
+      if(k != "none")
+        writeln(k, " -> ", v);
     }
   }
 
@@ -259,18 +272,18 @@ class Impl {
       if(currentOpts.opt_remote == RemoteOption.add ||
          currentOpts.opt_remote == RemoteOption.remove) {
         // processing the args removes them from the array
-        
+
          if(currentOpts.opt_remote == RemoteOption.add) {
           if(currentOpts.allargs.length != 3) {
             writeln("Invalid arguments specified");
             exit(-1);
           }
-        
+
           string name = currentOpts.allargs[$-2];
           string url  = currentOpts.allargs[$-1];
           writeln("Adding remote ", name, " -> ", url);
           cfg["Repos"].setKey(name, url);
-          saveAppConfig(cfg);  
+          saveAppConfig(cfg);
           exit(0);
         } else if(currentOpts.opt_remote == RemoteOption.remove) {
           if(currentOpts.allargs.length != 2) {
@@ -281,13 +294,13 @@ class Impl {
           string name = currentOpts.allargs[$-1];
           cfg["Repos"].removeKey(name);
           writeln("Removing remote ", name);
-          saveAppConfig(cfg);            
+          saveAppConfig(cfg);
           exit(0);
         }
 
 
       }
-      
+
       //string currentRepoDir = buildNormalizedPath(repodir
       //cfg["Erlangs"].setKey(opts.id, outputPath);
       //saveAppConfig(cfg);
