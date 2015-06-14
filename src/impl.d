@@ -7,12 +7,12 @@ import std.process;
 import std.format;
 import std.string;
 import std.getopt;
+import std.datetime;
 import colorize : fg, color, cwrite, cwriteln;
 
 import config;
 import dini;
 import log;
-import utils;
 
 enum RemoteOption { none, add, remove, show };
 
@@ -59,18 +59,18 @@ class Impl {
 
 
   void setupBins() {
-      auto binPath = buildNormalizedPath(getConfigDir(), "bin");
-      string msg = ("PLEASE ADD " ~ binPath ~ " TO YOUR PATH").color(fg.red);
-      cwriteln(msg);
-      mkdirSafe(binPath);
-      foreach(bin;getSymlinkedExecutables()) {
-          auto linkTo = buildNormalizedPath(binPath, baseName(bin));
-          try {
-            symlink(thisExePath(), linkTo);
-            } catch (Exception e) {
-              writeln("Could not link: ", e.msg, ". Ok to continue.");
-            }
+    auto binPath = buildNormalizedPath(getConfigDir(), "bin");
+    string msg = ("PLEASE ADD " ~ binPath ~ " TO YOUR PATH").color(fg.red);
+    cwriteln(msg);
+    mkdirSafe(binPath);
+    foreach(bin;getSymlinkedExecutables()) {
+      auto linkTo = buildNormalizedPath(binPath, baseName(bin));
+      try {
+        symlink(thisExePath(), linkTo);
+      } catch (Exception e) {
+        writeln("Could not link: ", e.msg, ". Ok to continue.");
       }
+    }
   }
 
 
@@ -188,97 +188,102 @@ class Impl {
   }
 
   void doClone(Ini cfg, string name) {
-      auto keys = cfg["Repos"].keys();
-      if(!(name in keys)) {
-        writeln("Unknown repo:", name);
-        exit(-1);
-      }
-      string repoURL = cfg["Repos"].getKey(name);
-      string dest = buildNormalizedPath(getConfigSubdir(repodir),name);
-      string command = "git clone " ~ repoURL ~ " " ~ dest;
-      log_debug(command);
-      auto pid = spawnShell(command);
-      wait(pid);
+    auto keys = cfg["Repos"].keys();
+    if(!(name in keys)) {
+      writeln("Unknown repo:", name);
+      exit(-1);
+    }
+    string repoURL = cfg["Repos"].getKey(name);
+    string dest = buildNormalizedPath(getConfigSubdir(repodir),name);
+    string command = "git clone " ~ repoURL ~ " " ~ dest;
+    log_debug(command);
+    auto pid = spawnShell(command);
+    wait(pid);
   }
 
   void doFetch(Ini cfg) {
-      auto keys = cfg["Repos"].keys();
-      if(!(currentOpts.opt_fetch in keys)) {
-        writeln("Unknown repo:", currentOpts.opt_fetch);
-        exit(-1);
-      }
-      string repoURL = cfg["Repos"].getKey(currentOpts.opt_fetch);
-      string dest = buildNormalizedPath(getConfigSubdir(repodir),currentOpts.opt_fetch);
+    auto keys = cfg["Repos"].keys();
+    if(!(currentOpts.opt_fetch in keys)) {
+      writeln("Unknown repo:", currentOpts.opt_fetch);
+      exit(-1);
+    }
+    string repoURL = cfg["Repos"].getKey(currentOpts.opt_fetch);
+    string dest = buildNormalizedPath(getConfigSubdir(repodir),currentOpts.opt_fetch);
 
-      if(!exists(dest)) {
-        writeln("Missing repo for " ~ currentOpts.opt_fetch
-            ~ ", which should be in " ~ dest ~ ". Maybe you forgot to reo --clone <repo_name>");
-        exit(-1);
-      }
-      string command = "cd " ~ dest ~ "  && git fetch --all";
-      log_debug(command);
-      auto pid = spawnShell(command);
-      wait(pid);
+    if(!exists(dest)) {
+      writeln("Missing repo for " ~ currentOpts.opt_fetch
+          ~ ", which should be in " ~ dest ~ ". Maybe you forgot to reo --clone <repo_name>");
+      exit(-1);
+    }
+    string command = "cd " ~ dest ~ "  && git fetch --all";
+    log_debug(command);
+    auto pid = spawnShell(command);
+    wait(pid);
   }
 
   void doRemote(Ini cfg) {
-      if(currentOpts.opt_remote == RemoteOption.show) {
-          auto keys = cfg["Repos"].keys();
-          foreach(k,v;keys) {
-            writeln(k, " -> ", v);
-          }
-          exit(0);
+    if(currentOpts.opt_remote == RemoteOption.show) {
+      auto keys = cfg["Repos"].keys();
+      foreach(k,v;keys) {
+        writeln(k, " -> ", v);
+      }
+      exit(0);
+    }
+
+    if(currentOpts.opt_remote == RemoteOption.add ||
+        currentOpts.opt_remote == RemoteOption.remove) {
+      // processing the args removes them from the array
+
+      if(currentOpts.opt_remote == RemoteOption.add) {
+        if(currentOpts.allargs.length != 3) {
+          writeln("Invalid arguments specified");
+          exit(-1);
         }
 
-      if(currentOpts.opt_remote == RemoteOption.add ||
-         currentOpts.opt_remote == RemoteOption.remove) {
-        // processing the args removes them from the array
-
-         if(currentOpts.opt_remote == RemoteOption.add) {
-          if(currentOpts.allargs.length != 3) {
-            writeln("Invalid arguments specified");
-            exit(-1);
-          }
-
-          string name = currentOpts.allargs[$-2];
-          string url  = currentOpts.allargs[$-1];
-          writeln("Adding remote ", name, " -> ", url);
-          cfg["Repos"].setKey(name, url);
-          saveAppConfig(cfg);
-          exit(0);
-        } else if(currentOpts.opt_remote == RemoteOption.remove) {
-          if(currentOpts.allargs.length != 2) {
-            writeln("Invalid arguments specified");
-            exit(-1);
-          }
-
-          string name = currentOpts.allargs[$-1];
-          cfg["Repos"].removeKey(name);
-          writeln("Removing remote ", name);
-          saveAppConfig(cfg);
-          exit(0);
+        string name = currentOpts.allargs[$-2];
+        string url  = currentOpts.allargs[$-1];
+        writeln("Adding remote ", name, " -> ", url);
+        cfg["Repos"].setKey(name, url);
+        saveAppConfig(cfg);
+        exit(0);
+      } else if(currentOpts.opt_remote == RemoteOption.remove) {
+        if(currentOpts.allargs.length != 2) {
+          writeln("Invalid arguments specified");
+          exit(-1);
         }
 
-
+        string name = currentOpts.allargs[$-1];
+        cfg["Repos"].removeKey(name);
+        writeln("Removing remote ", name);
+        saveAppConfig(cfg);
+        exit(0);
       }
 
-      //string currentRepoDir = buildNormalizedPath(repodir
-      //cfg["Erlangs"].setKey(opts.id, outputPath);
-      //saveAppConfig(cfg);
+
+    }
+
+    //string currentRepoDir = buildNormalizedPath(repodir
+    //cfg["Erlangs"].setKey(opts.id, outputPath);
+    //saveAppConfig(cfg);
   }
 
 
+  string getTimestampedFilename() {
+    auto currentTime = Clock.currTime();
+    auto timeString = currentTime.toISOExtString();
+    return timeString.replace("-","_").replace(":","_").replace(".", "_");
+  }
 
   void setSystemDefaultIfFirst(string section, string id) {
-      Ini cfg = getAppConfig();
-      IniSection e8cfg = cfg.getSection(section);
-      if(e8cfg.hasKey("system_default") && e8cfg.getKey("system_default") == null ) {
-        write("A system default hasn't been set. Would you like to use ", id, " as the system default? (y/N) ");
-        string line = readln();
-        if(line.toLower().strip() == "y") {
-          e8cfg.setKey("system_default", id);
-          saveAppConfig(cfg);
-        }
+    Ini cfg = getAppConfig();
+    IniSection e8cfg = cfg.getSection(section);
+    if(e8cfg.hasKey("system_default") && e8cfg.getKey("system_default") == null ) {
+      write("A system default hasn't been set. Would you like to use ", id, " as the system default? (y/N) ");
+      string line = readln();
+      if(line.toLower().strip() == "y") {
+        e8cfg.setKey("system_default", id);
+        saveAppConfig(cfg);
       }
     }
+  }
 }

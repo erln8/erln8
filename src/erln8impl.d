@@ -13,7 +13,6 @@ import config;
 import dirconfig;
 import dini;
 import log;
-import utils;
 import builder;
 import impl;
 
@@ -389,20 +388,6 @@ osx_gcc_env=CC=gcc-4.2 CPPFLAGS='-DNDEBUG' MAKEFLAGS='-j 3'k
       setSystemDefaultIfFirst("Erln8", opts.id);
       writeln("Done!");
     }
-
-
-    //void setSystemDefaultIfFirst(string id) {
-    //  Ini cfg = getAppConfig();
-    //  IniSection e8cfg = cfg.getSection("Erln8");
-    //  if(e8cfg.hasKey("system_default") && e8cfg.getKey("system_default") == null ) {
-    //    write("A system default hasn't been set. Would you like to use ", id, " as the system default? (y/N) ");
-    //    string line = readln();
-    //    if(line.toLower().strip() == "y") {
-    //      e8cfg.setKey("system_default", id);
-    //      saveAppConfig(cfg);
-    //    }
-    //  }
-    //}
 
     override void runConfig() {
       // TODO: this has to go after init
