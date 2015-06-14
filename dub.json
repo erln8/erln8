@@ -1,6 +1,6 @@
 {
 	"name": "erln8",
-	"description": "A sneaky Erlang version manager.",
+	"description": "Sneaky Erlang, Rebar and Rebar3 version managers.",
 	"copyright": "Copyright © 2015, dparfitt",
   "license": "Apache-2.0",
 	"authors": ["Dave Parfitt <diparfitt@gmail.com>"],
