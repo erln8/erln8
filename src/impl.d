@@ -21,9 +21,9 @@ struct CommandLineOptions {
   bool   opt_list      = false;
   string opt_clone     = null;
   string opt_fetch     = null;
-  bool   opt_build     = false;
+  string opt_build     = null;
   string opt_repo      = null;
-  string opt_tag       = null;
+  //string opt_tag       = null;
   string opt_id        = null;
   string opt_config    = null;
   bool   opt_show      = false;
@@ -33,7 +33,7 @@ struct CommandLineOptions {
   bool   opt_link      = false;
   bool   opt_unlink    = false;
   bool   opt_force     = false;
-  bool   opt_nocolor   = false;
+  //bool   opt_nocolor   = false;
   bool   opt_buildable = false;
   bool   opt_debug     = false;
   RemoteOption opt_remote = RemoteOption.none;
@@ -55,47 +55,8 @@ class Impl {
   abstract void runCommand(string[] cmdline);
   abstract void runConfig();
   abstract string[] getSymlinkedExecutables();
+  abstract void processArgs(string[] args);
 
-
-  void processArgs(string[] args) {
-    CommandLineOptions opts;
-    try {
-      auto rslt = getopt(
-        args,
-         std.getopt.config.passThrough,
-        "use",       "Setup the current directory to use a specific verion of Erlang", &opts.opt_use,
-        "list",      "List available Erlang installations",      &opts.opt_list,
-        "remote",    "add/delete/show remotes", &opts.opt_remote,
-        "clone",     "Clone an Erlang source repository",  &opts.opt_clone,
-        "fetch",     "Update source repos",  &opts.opt_fetch,
-        "build",     "Build a specific version of OTP from source",  &opts.opt_build,
-        "repo",      "Specifies repo name to build from",  &opts.opt_repo,
-        "tag",       "Specifies repo branch/tag to build fro,",  &opts.opt_tag,
-        "id",        "A user assigned name for a version of Erlang",  &opts.opt_id,
-        "config",    "Build configuration",  &opts.opt_config,
-        "show",      "Show the configured version of Erlang in the current working directory",  &opts.opt_show,
-        "prompt",    "Display the version of Erlang configured for this part of the directory tree",  &opts.opt_prompt,
-        "configs",   "List build configs",  &opts.opt_configs,
-        "repos",     "List build repos",  &opts.opt_repos,
-        "link",      "Link a non-erln8 build of Erlang to erln8",  &opts.opt_link,
-        "unlink",    "Unlink a non-erln8 build of Erlang from erln8",  &opts.opt_unlink,
-        "force",     "Overwrite an erln8.config in the current directory",  &opts.opt_force,
-        "nocolor",   "Don't use color output",  &opts.opt_nocolor,
-        "buildable", "List tags to build from configured source repos", &opts.opt_buildable,
-        "debug",     "Show debug output", &opts.opt_debug
-          );
-      if(rslt.helpWanted) {
-        defaultGetoptPrinter(name, rslt.options);
-        exit(0);
-      }
-      log_debug(opts);
-      opts.allargs = args;
-      currentOpts = opts;
-      } catch (Exception e) {
-        writeln(e.msg);
-        exit(-1);
-      }
-  }
 
   void setupBins() {
       auto binPath = buildNormalizedPath(getConfigDir(), "bin");

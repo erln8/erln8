@@ -1,6 +1,13 @@
 /*
+  erln8/reo/reo3
+  (c) 2015 Dave Parfitt
+  diparfitt@gmail.com
+  See LICENSE for licensing info.
+  V 2 aka Using Tom Hardy's Shoulder to Steady a Rifle Shot
+/*
   required DMD 2.067+ for getopt support
 */
+
 
 import std.stdio;
 import std.string;
@@ -74,7 +81,6 @@ void main(string[] args) {
   log_debug(impls);
   log_debug(implCommands);
   if(binname in impls) {
-    cwriteln(baseName(args[0]) ~ " v2".color(fg.blue));
     log_debug("Using config impl:", binname);
     Impl impl = impls[binname];
     impl.processArgs(args);
@@ -85,6 +91,9 @@ void main(string[] args) {
     Impl impl = implCommands[binname];
     impl.processArgs(args);
     impl.init();
+    // TODO: should this be a config option?
+    string msg = impl.name ~ " running " ~ to!(string)(args);
+    cwriteln(msg.color(fg.yellow));
     impl.runCommand(args);
   } else {
     log_fatal("Unknown command: ", binname);

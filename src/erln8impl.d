@@ -117,6 +117,51 @@ osx_gcc_env=CC=gcc-4.2 CPPFLAGS='-DNDEBUG' MAKEFLAGS='-j 3'k
 
 
 
+    override void processArgs(string[] args) {
+      CommandLineOptions opts;
+      try {
+        auto rslt = getopt(
+            args,
+            std.getopt.config.passThrough,
+            "use",       "Setup the current directory to use a specific verion of Erlang", &opts.opt_use,
+            "list",      "List available Erlang installations",      &opts.opt_list,
+            "remote",    "add/delete/show remotes", &opts.opt_remote,
+            "clone",     "Clone an Erlang source repository",  &opts.opt_clone,
+            "fetch",     "Update source repos",  &opts.opt_fetch,
+            "build",     "Build a specific version of OTP from source",  &opts.opt_build,
+            "repo",      "Specifies repo name to build from",  &opts.opt_repo,
+            //"tag",       "Specifies repo branch/tag to build fro,",  &opts.opt_tag,
+            "id",        "A user assigned name for a version of Erlang",  &opts.opt_id,
+            "config",    "Build configuration",  &opts.opt_config,
+            "show",      "Show the configured version of Erlang in the current working directory",  &opts.opt_show,
+            "prompt",    "Display the version of Erlang configured for this part of the directory tree",  &opts.opt_prompt,
+            "configs",   "List build configs",  &opts.opt_configs,
+            "repos",     "List build repos",  &opts.opt_repos,
+            "link",      "Link a non-erln8 build of Erlang to erln8",  &opts.opt_link,
+            "unlink",    "Unlink a non-erln8 build of Erlang from erln8",  &opts.opt_unlink,
+            "force",     "Overwrite an erln8.config in the current directory",  &opts.opt_force,
+            "buildable", "List tags to build from configured source repos", &opts.opt_buildable,
+            "debug",     "Show debug output", &opts.opt_debug
+              );
+        if(rslt.helpWanted) {
+          // it's an Arrested Development joke
+          auto bannerMichael = "Usage: " ~ name ~ " [--use <id> --force] [--list] [--remote add|delete|show]\n";
+          bannerMichael ~= "       [--clone <remotename>] [--fetch <remotename>] [--show] [--prompt]\n";
+          bannerMichael ~= "       [--build --id <someid> --repo <remotename> --config <configname>]\n";
+          bannerMichael ~= "       [--buildable] [--configs] [--link <path>] [--unline <id>]\n";
+          defaultGetoptPrinter(bannerMichael.color(fg.yellow), rslt.options);
+          exit(0);
+        }
+        log_debug(opts);
+        opts.allargs = args;
+        currentOpts = opts;
+      } catch (Exception e) {
+        writeln(e.msg);
+        exit(-1);
+      }
+    }
+
+
     override string[] getSymlinkedExecutables() {
       string[] all = [];
       foreach(bin;bins) {
@@ -186,9 +231,9 @@ osx_gcc_env=CC=gcc-4.2 CPPFLAGS='-DNDEBUG' MAKEFLAGS='-j 3'k
       opts.repo = (repo == null ? "default" : repo);
       opts.tag = tag;
       if(opts.id == null) {
-        opts.id  = tag;    
+        opts.id  = tag;
       } else {
-        opts.id  = id;    
+        opts.id  = id;
       }
       // TODO: use Erlang.default_config value here
       //opts.configname = (configname == null ? "default_config" : configname);
@@ -277,7 +322,7 @@ osx_gcc_env=CC=gcc-4.2 CPPFLAGS='-DNDEBUG' MAKEFLAGS='-j 3'k
 
     void doBuild(Ini cfg) {
       ErlangBuildOptions opts = getBuildOptions(currentOpts.opt_repo,
-          currentOpts.opt_tag,
+          currentOpts.opt_build,
           currentOpts.opt_id,
           currentOpts.opt_config);
 
@@ -329,7 +374,7 @@ osx_gcc_env=CC=gcc-4.2 CPPFLAGS='-DNDEBUG' MAKEFLAGS='-j 3'k
       b.addCommand("make                 ", cmd3);
       b.addCommand("make install         ", cmd4);
       b.addCommand("make install-docs    ", cmd4);
-      // TODO: build plt
+      // TODO: build plt? how does this work with multiple versions of erlang?
       if(!b.run()) {
         writeln("*** Build failed ***");
         writeln("Here are the last 10 lines of " ~ logFile);
