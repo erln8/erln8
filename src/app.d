@@ -3,7 +3,6 @@
   (c) 2015 Dave Parfitt
   diparfitt@gmail.com
   See LICENSE for licensing info.
-  V 2 aka Using Tom Hardy's Shoulder to Steady a Rifle Shot
 /*
   required DMD 2.067+ for getopt support
 */

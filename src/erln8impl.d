@@ -319,9 +319,9 @@ osx_gcc_env=CC=gcc-4.2 CPPFLAGS='-DNDEBUG' MAKEFLAGS='-j 3'k
       }
     }
 
-    void doBuild(Ini cfg) {
+    void doBuild(Ini cfg, string tag) {
       ErlangBuildOptions opts = getBuildOptions(currentOpts.opt_repo,
-          currentOpts.opt_build,
+          tag,
           currentOpts.opt_id,
           currentOpts.opt_config);
 
@@ -410,7 +410,9 @@ osx_gcc_env=CC=gcc-4.2 CPPFLAGS='-DNDEBUG' MAKEFLAGS='-j 3'k
       } else if(currentOpts.opt_fetch) {
         doFetch(cfg);
       } else if(currentOpts.opt_build) {
-        doBuild(cfg);
+        foreach(b;currentOpts.opt_build) {
+          doBuild(cfg, b);
+        }
       } else if(currentOpts.opt_remote != RemoteOption.none) {
         doRemote(cfg);
       } else {

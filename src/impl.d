@@ -21,7 +21,7 @@ struct CommandLineOptions {
   bool   opt_list      = false;
   string opt_clone     = null;
   string opt_fetch     = null;
-  string opt_build     = null;
+  string[] opt_build   = null;
   string opt_repo      = null;
   //string opt_tag       = null;
   string opt_id        = null;

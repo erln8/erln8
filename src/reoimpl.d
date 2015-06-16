@@ -293,9 +293,9 @@ EOS"
 
 
     // TODO: NEEDS A SYSTEM DEFAULT IF ONE ISN'T SET
-    void doBuild(Ini cfg) {
+    void doBuild(Ini cfg, string tag) {
       RebarBuildOptions opts = getBuildOptions(currentOpts.opt_repo,
-          currentOpts.opt_build,
+          tag,
           currentOpts.opt_id,
           currentOpts.opt_config);
 
@@ -372,7 +372,9 @@ EOS"
       } else if(currentOpts.opt_fetch) {
         doFetch(cfg);
       } else if(currentOpts.opt_build) {
-        doBuild(cfg);
+        foreach(b;currentOpts.opt_build) {
+          doBuild(cfg, b);
+        }
       } else {
         log_debug("Nothing to do");
       }
