@@ -5,13 +5,13 @@
 
 # erln8 v2
 
-ernl8 v2 contains a suite of tools that let a developer set custom versions of Erlang, Rebar, and Rebar3 per directory. This allows you to "set and forget" versions of your tools for a project once.
+ernl8 v2 contains several tools that let a developer set custom versions of Erlang, Rebar, and Rebar3 per directory. This allows you to "set and forget" versions of your tools for a project once.
 
 erln8 v2 ships with 3 binaries:
 
-- erln8 - Erlang version manager, completely rewritten from the ground up.
-- reo - Rebar version manager, uses the same core code that erln8 uses.
-- reo3 - Same as reo, but for Rebar3.
+- `erln8` - Erlang version manager, completely rewritten from the ground up.
+- `reo` - Rebar version manager, uses the same core code that erln8 uses.
+- `reo3` - Same as reo, but for Rebar3.
 
 
 ## Quickstart
@@ -80,13 +80,27 @@ When an Erlang, Rebar, or Rebar3 command is issued in the shell, erln8/reo/reo3 
 | `~/.erln8.d/bin`  |  Binary directory, contains erln8, reo, reo3 and symlinks to all Erlang, Rebar, Rebar3 executables |
 | `~/.erln8.d/otps`  | erln8 managed versions of Erlang |
 | `~/.erln8.d/repos`  | erln8 Git repos to build Erlang from source  |
+| | |
+| | |
+| | |
+| | |
+| | |
 
 
+## Precompiled Binaries
 
+### OSX Yosemite
+
+### Ubuntu
+
+### Fedora/Centos
+
+### FreeBSD
+
+### OpenBSD
 
 ## Building from source
 
-## Using a precompiled binary
 
 ## FAQ
 
@@ -111,6 +125,9 @@ When an Erlang, Rebar, or Rebar3 command is issued in the shell, erln8/reo/reo3 
 	
 - What does reo mean?
 	- Australian slang for "rebar"
+
+- Does erln8 support MS Windows?
+	- I don't own Windows, but if you want to submit PR's to support it and build precompiled binaries, I'll all for it.
 
 - Do you sing at parties?
 	-  No, not really.

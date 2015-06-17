@@ -67,6 +67,26 @@ void initImpls() {
   }
 }
 
+
+// LogLevel
+//Erln8.log_level
+LogLevel getLogLevel(Ini cfg) {
+  try {
+    string loglevel = cfg["Erln8"].getKey("log_level");
+    if(loglevel == "error") {
+      return LogLevel.ERROR;
+    } else if(loglevel == "info") {
+      return LogLevel.INFO;
+    } else if(loglevel == "debug") {
+      return LogLevel.DEBUG;
+    } else {
+      return LogLevel.ERROR;
+    }
+  } catch (Exception e) {
+    return LogLevel.ERROR;
+  }
+}
+
 void main(string[] args) {
 
   log_level = LogLevel.ERROR;
@@ -90,9 +110,11 @@ void main(string[] args) {
     Impl impl = implCommands[binname];
     impl.processArgs(args);
     impl.init();
-    // TODO: should this be a config option - yes
-    string msg = impl.name ~ " running " ~ to!(string)(args);
-    cwriteln(msg.color(fg.yellow));
+    if(getLogLevel(impl.getAppConfig()) == LogLevel.INFO) {
+      // show a trace message that shows which binaries/params are being called
+      string msg = impl.name ~ " running " ~ to!(string)(args);
+      cwriteln(msg.color(fg.yellow));
+    }
     impl.runCommand(args);
   } else {
     log_fatal("Unknown command: ", binname);

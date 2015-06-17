@@ -89,6 +89,7 @@ string cfgfileout = format("
 default_config=default
 system_default=
 color=true
+log_level=error
 
 [Repos]
 default=%s
