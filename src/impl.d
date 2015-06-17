@@ -22,6 +22,7 @@ struct CommandLineOptions {
   string opt_clone     = null;
   string opt_fetch     = null;
   string[] opt_build   = null;
+  bool opt_build_latest= false;
   string opt_repo      = null;
   //string opt_tag       = null;
   string opt_id        = null;
@@ -56,7 +57,7 @@ class Impl {
   abstract void runConfig();
   abstract string[] getSymlinkedExecutables();
   abstract void processArgs(string[] args);
-
+  abstract void doBuild(Ini cfg, string tag);
 
   void setupBins() {
     auto binPath = buildNormalizedPath(getConfigDir(), "bin");
@@ -158,6 +159,16 @@ class Impl {
       auto pid = spawnShell(cmd);
       wait(pid);
     }
+  }
+
+
+  void doBuildLatest(Ini cfg) {
+    string repo = currentOpts.opt_repo == null ? "default" : currentOpts.opt_repo;
+    string sourcePath = buildNormalizedPath(getConfigSubdir("repos"), repo);
+    string cmd = "cd " ~ sourcePath ~ " && git describe --abbrev=0 --tags";
+    auto cmdout = executeShell(cmd);
+    string finaltag = cmdout.output.strip;
+    doBuild(cfg, finaltag);
   }
 
   void doList(Ini cfg) {
