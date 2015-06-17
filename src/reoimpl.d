@@ -95,7 +95,7 @@ EOS"
             "clone",     "Clone a Rebar source repository",  &opts.opt_clone,
             "fetch",     "Update source repos",  &opts.opt_fetch,
             "build",     "Build a specific version of Rebar from source",  &opts.opt_build,
-            "build_latest", "Build the latest tagged version of Rebar from source",  &opts.opt_build_latest,
+            "build-latest", "Build the latest tagged version of Rebar from source",  &opts.opt_build_latest,
             "repo",      "Specifies repo name to build from",  &opts.opt_repo,
             //"tag",       "Specifies repo branch/tag to build fro,",  &opts.opt_tag,
             "id",        "A user assigned name for a version of Rebar",  &opts.opt_id,
