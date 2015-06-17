@@ -90,7 +90,7 @@ void main(string[] args) {
     Impl impl = implCommands[binname];
     impl.processArgs(args);
     impl.init();
-    // TODO: should this be a config option?
+    // TODO: should this be a config option - yes
     string msg = impl.name ~ " running " ~ to!(string)(args);
     cwriteln(msg.color(fg.yellow));
     impl.runCommand(args);

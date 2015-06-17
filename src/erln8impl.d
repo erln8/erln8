@@ -49,7 +49,6 @@ string[] bins = [
   "lib/erlang/lib/webtool-*/priv/bin/start_webtool"
   ];
 
-
   class Erln8Impl : Impl {
 
     this() {
@@ -298,7 +297,9 @@ osx_gcc_env=CC=gcc-4.2 CPPFLAGS='-DNDEBUG' MAKEFLAGS='-j 3'k
           auto ls = executeShell("ls " ~ p);
           if (ls.status != 0) {
             writeln("Failed to find file while creating symlink: ", p);
-            // keep going, maybe a command has been removed?
+            writeln("Most likely an outdated Erlang command. Moving on.");
+            // keep going, most likely a command that doesn't exist in a
+            // newer version of Erlang
           } else {
             if(splitLines(ls.output).length > 1) {
               log_fatal("Found more than 1 executable for ", p , " while creating symlinks");
@@ -375,7 +376,6 @@ osx_gcc_env=CC=gcc-4.2 CPPFLAGS='-DNDEBUG' MAKEFLAGS='-j 3'k
       b.addCommand("make                 ", cmd3);
       b.addCommand("make install         ", cmd4);
       b.addCommand("make install-docs    ", cmd4);
-      // TODO: build plt? how does this work with multiple versions of erlang?
       if(!b.run()) {
         writeln("*** Build failed ***");
         writeln("Here are the last 10 lines of " ~ logFile);
@@ -392,8 +392,6 @@ osx_gcc_env=CC=gcc-4.2 CPPFLAGS='-DNDEBUG' MAKEFLAGS='-j 3'k
     }
 
     override void runConfig() {
-      // TODO: this has to go after init
-      // TODO: don't pass cfg everywhere?
       Ini cfg = getAppConfig();
       if(currentOpts.opt_buildable) {
         doBuildable(cfg);

@@ -337,7 +337,6 @@ EOS"
       b.addCommand("Bootstrap            ", cmd1);
       b.addCommand("Install              ", cmd2);
 
-      // TODO: build plt
       if(!b.run()) {
         writeln("*** Build failed ***");
         writeln("Here are the last 10 lines of " ~ logFile);
@@ -353,8 +352,6 @@ EOS"
     }
 
     override void runConfig() {
-      // TODO: this has to go after init
-      // TODO: don't pass cfg everywhere?
       Ini cfg = getAppConfig();
       if(currentOpts.opt_buildable) {
         doBuildable(cfg);
