@@ -16,11 +16,18 @@ erln8 v2 ships with 3 binaries:
 
 ## Quickstart
 
+### OSX
 Build and install:
 
 ```
+brew upgrade
+brew install dmd dub
+  # You MUST use DMD 2.076.1 or above
+git clone https://github.com/erln8/reo.git
+cd reo
 make
 make install
+
 # erln8, reo, and reo3 are all installed in the local user home
 # at ~/.erln8.d/bin
 # YOU MUST ADD ~/.erln8.d/bin TO YOUR PATH!
