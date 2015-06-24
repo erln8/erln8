@@ -17,7 +17,7 @@ import std.path;
 import std.file; // exists()
 
 import std.string;
-
+import std.algorithm.searching;
 import dini; // ini parser
 import colorize : fg, color, cwriteln, cwritefln;
 
@@ -89,7 +89,12 @@ LogLevel getLogLevel(Ini cfg) {
 
 void main(string[] args) {
 
-  log_level = LogLevel.ERROR;
+  if(canFind(args, "--debug")) {
+    log_level = LogLevel.DEBUG;
+  } else {
+    log_level = LogLevel.ERROR;
+  }
+
   log_debug("log_level = ", log_level);
 
   log_debug("args:", args);
