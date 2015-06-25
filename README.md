@@ -16,7 +16,12 @@ erln8 v2 ships with 3 binaries:
 
 ## Quickstart
 
+#### NOTE
+
+***Currently, erln8 won't generate the correct symlinks if you already have an `~/.erln8.d` from an older version. Move it out of the way before continuing.***
+
 ### OSX
+
 Build and install:
 
 ```
