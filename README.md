@@ -33,7 +33,53 @@ make install
 # YOU MUST ADD ~/.erln8.d/bin TO YOUR PATH!
 ```
 
-Build the latest tagged version of Erlang from the OTP Git repo:
+### Ubuntu 15.04
+
+```
+sudo apt-get install build-essential libncurses5-dev openssl libssl-dev fop xsltproc unixodbc-dev libglib2.0-dev git autoconf
+sudo apt-get install xdg-utils
+
+wget http://downloads.dlang.org/releases/2.x/2.067.1/dmd_2.067.1-0_amd64.deb
+sudo dpkg -i dmd_2.067.1-0_amd64.deb
+
+wget http://code.dlang.org/files/dub-0.9.23-linux-x86_64.tar.gz
+tar xvzf dub-0.9.23-linux-x86_64.tar.gz
+sudo mv dub /usr/local/bin/dub
+
+git clone https://github.com/erln8/reo.git
+cd reo
+make
+make install
+
+# erln8, reo, and reo3 are all installed in the local user home
+# at ~/.erln8.d/bin
+# YOU MUST ADD ~/.erln8.d/bin TO YOUR PATH!
+```
+
+### Centos
+
+```
+sudo yum install gcc glibc-devel make ncurses-devel openssl-devel autoconf git
+
+wget http://downloads.dlang.org/releases/2.x/2.067.1/dmd-2.067.1-0.fedora.x86_64.rpm
+sudo yum install dmd-2.067.1-0.fedora.x86_64.rpm
+
+wget http://code.dlang.org/files/dub-0.9.23-1.x86_64.rpm
+sudo yum install dub-0.9.23-1.x86_64.rpm
+
+
+git clone https://github.com/erln8/reo.git
+cd reo
+make
+make install
+
+# erln8, reo, and reo3 are all installed in the local user home
+# at ~/.erln8.d/bin
+# YOU MUST ADD ~/.erln8.d/bin TO YOUR PATH!
+```
+## Build the latest tagged version of Erlang
+
+To build the latest tagged version of Erlang from the OTP Git repo:
 
 ```
 erln8 --build-latest
