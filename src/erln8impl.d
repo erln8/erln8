@@ -65,7 +65,7 @@ string[] bins = [
     }
 
     override void initOnce() {
-      if(exists(buildNormalizedPath(getConfigDir(), appConfigName))) {
+      if(exists(buildNormalizedPath(getConfigDir(), "bin", "erl"))) {
         log_debug("Erln8 has already been initialized");
         return;
       }
@@ -350,6 +350,7 @@ osx_gcc_env=CC=gcc-4.2 CPPFLAGS='-DNDEBUG' MAKEFLAGS='-j 3'k
       string logFile = buildNormalizedPath(tmp, "build_log");
       log_debug("log = ", tmp);
 
+      writeln("Building Erlang ", opts.tag);
       mkdirRecurse(tmp);
 
       string cmd0 = format("%s cd %s && git archive %s | (cd %s; tar -f - -x)",

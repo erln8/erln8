@@ -99,6 +99,13 @@ erln8 --buildable
 erln8 --build OTP_R16B03-1
 ```
 
+You can also build multiple versions with one command:
+
+```
+erln8 --build OTP_R16B03-1 --build OTP-17.0 --build OTP-18.0
+```
+
+
 ## Setting a version of Erlang, Rebar or Rebar3 in the current direcory
 
 ```
