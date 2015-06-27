@@ -83,7 +83,7 @@ EOS"
       doClone(cfg, "default");
     }
 
-    override void processArgs(string[] args) {
+    override void processArgs(string[] args, bool showHelp) {
       CommandLineOptions opts;
       try {
         auto rslt = getopt(
@@ -110,7 +110,7 @@ EOS"
             "buildable", "List tags to build from configured source repos", &opts.opt_buildable,
             "debug",     "Show debug output", &opts.opt_debug
               );
-        if(rslt.helpWanted) {
+        if(showHelp && rslt.helpWanted) {
           // it's an Arrested Development joke
           auto bannerMichael = "Usage: " ~ name ~ " [--use <id> --force] [--list] [--remote add|delete|show]\n";
           bannerMichael ~= "       [--clone <remotename>] [--fetch <remotename>] [--show] [--prompt]\n";

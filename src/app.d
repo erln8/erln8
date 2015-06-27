@@ -107,13 +107,13 @@ void main(string[] args) {
   if(binname in impls) {
     log_debug("Using config impl:", binname);
     Impl impl = impls[binname];
-    impl.processArgs(args);
+    impl.processArgs(args, true);
     impl.init();
     impl.runConfig();
   } else if(binname in implCommands) {
     log_debug("Using command impl:", binname);
     Impl impl = implCommands[binname];
-    impl.processArgs(args);
+    impl.processArgs(args, false);
     impl.init();
     if(getLogLevel(impl.getAppConfig()) == LogLevel.INFO) {
       // show a trace message that shows which binaries/params are being called

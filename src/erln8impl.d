@@ -116,7 +116,7 @@ osx_gcc_env=CC=gcc-4.2 CPPFLAGS='-DNDEBUG' MAKEFLAGS='-j 3'k
 
 
 
-    override void processArgs(string[] args) {
+    override void processArgs(string[] args, bool showHelp) {
       CommandLineOptions opts;
       try {
         auto rslt = getopt(
@@ -129,6 +129,7 @@ osx_gcc_env=CC=gcc-4.2 CPPFLAGS='-DNDEBUG' MAKEFLAGS='-j 3'k
             "fetch",     "Update source repos",  &opts.opt_fetch,
             "build",     "Build a specific version of OTP from source",  &opts.opt_build,
             "build-latest", "Build the latest tagged version of OTP from source",  &opts.opt_build_latest,
+            "env",       "Display the location of the Erlang ID that's currently in use", &opts.opt_env,
             "repo",      "Specifies repo name to build from",  &opts.opt_repo,
             //"tag",       "Specifies repo branch/tag to build fro,",  &opts.opt_tag,
             "id",        "A user assigned name for a version of Erlang",  &opts.opt_id,
@@ -143,7 +144,7 @@ osx_gcc_env=CC=gcc-4.2 CPPFLAGS='-DNDEBUG' MAKEFLAGS='-j 3'k
             "buildable", "List tags to build from configured source repos", &opts.opt_buildable,
             "debug",     "Show debug output", &opts.opt_debug
               );
-        if(rslt.helpWanted) {
+        if(showHelp && rslt.helpWanted) {
           // it's an Arrested Development joke
           auto bannerMichael = "Usage: " ~ name ~ " [--use <id> --force] [--list] [--remote add|delete|show]\n";
           bannerMichael ~= "       [--clone <remotename>] [--fetch <remotename>] [--show] [--prompt]\n";
