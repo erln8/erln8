@@ -16,7 +16,12 @@ erln8 v2 ships with 3 binaries:
 
 ## Quickstart
 
+#### NOTE
+
+***Currently, erln8 won't generate the correct symlinks if you already have an `~/.erln8.d` from an older version. Move it out of the way before continuing.***
+
 ### OSX
+
 Build and install:
 
 ```
@@ -93,6 +98,13 @@ erln8 --buildable
 # and then build it
 erln8 --build OTP_R16B03-1
 ```
+
+You can also build multiple versions with one command:
+
+```
+erln8 --build OTP_R16B03-1 --build OTP-17.0 --build OTP-18.0
+```
+
 
 ## Setting a version of Erlang, Rebar or Rebar3 in the current direcory
 
