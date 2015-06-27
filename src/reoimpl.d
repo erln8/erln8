@@ -153,7 +153,8 @@ EOS"
         exit(-1);
       }
       if(currentOpts.opt_show) {
-        writeln(rebarid);
+        auto path = cfg["Rebars"].getKey(rebarid);
+        writeln(rebarid, " @ ", path);
       } else {
         write(rebarid);
       }
