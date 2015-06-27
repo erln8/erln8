@@ -129,7 +129,6 @@ osx_gcc_env=CC=gcc-4.2 CPPFLAGS='-DNDEBUG' MAKEFLAGS='-j 3'k
             "fetch",     "Update source repos",  &opts.opt_fetch,
             "build",     "Build a specific version of OTP from source",  &opts.opt_build,
             "build-latest", "Build the latest tagged version of OTP from source",  &opts.opt_build_latest,
-            "env",       "Display the location of the Erlang ID that's currently in use", &opts.opt_env,
             "repo",      "Specifies repo name to build from",  &opts.opt_repo,
             //"tag",       "Specifies repo branch/tag to build fro,",  &opts.opt_tag,
             "id",        "A user assigned name for a version of Erlang",  &opts.opt_id,
@@ -186,7 +185,8 @@ osx_gcc_env=CC=gcc-4.2 CPPFLAGS='-DNDEBUG' MAKEFLAGS='-j 3'k
         exit(-1);
       }
       if(currentOpts.opt_show) {
-        writeln(erlid);
+        auto path = cfg["Erlangs"].getKey(erlid);
+        writeln(erlid, " @ ", path);
       } else {
         write(erlid);
       }

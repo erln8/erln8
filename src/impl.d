@@ -51,7 +51,6 @@ class Impl {
   string appConfigName;   // ~/.erln8.d/foo_config
 
   abstract void initOnce();
-
   abstract void runCommand(string[] cmdline);
   abstract void runConfig();
   abstract string[] getSymlinkedExecutables();
