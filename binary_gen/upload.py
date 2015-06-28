@@ -9,7 +9,7 @@ conn = tinys3.Connection(S3_ACCESS_KEY,S3_SECRET_KEY)
 # osx upload is separate
 # as it's the platform I'm developing on
 print "Uploading OSX binaries"
-fosx = open('./osx/erln8.tgz','rb')
+fosx = open('./osx/erln8_osx.tgz','rb')
 conn.upload('erln8_osx.tgz', fosx, 'erln8/binaries/osx10.10')
 
 def uploadObject(platform):
