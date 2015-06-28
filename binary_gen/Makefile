@@ -9,5 +9,5 @@ all:
 
 
 clean:
-	find . -name "erln8.tgz" -exec rm {} \;
+	find . -name "erln8*.tgz" -exec rm {} \;
 	find . -name "erln8" -exec rm -rf {} \;

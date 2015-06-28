@@ -10,5 +10,5 @@ cp /reo/reo /erln8/reo3
 COMMANDS
 cp ../../LICENSE ./erln8/
 cp ../install.sh ./erln8/
-tar cvzf erln8.tgz ./erln8/*
+tar cvzf erln8_ubuntu1404.tgz ./erln8/*
 

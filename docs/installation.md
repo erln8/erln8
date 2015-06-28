@@ -7,21 +7,21 @@
 ## Latest Binary Releases
 
 
-![OSX Yosemite](img/apple_logo.png) [OSX Yosemite](https://s3.amazonaws.com/erln8/binaries/osx10.10/erln8)
+![OSX Yosemite](img/apple_logo.png) [OSX Yosemite](https://s3.amazonaws.com/erln8/binaries/osx10.10/erln8_osx.tgz)
 
 ---
 
 ![Ubuntu](img/ubuntu_logo.png) &nbsp;&nbsp;&nbsp; ![Debian](img/debian_logo.png) 
 
-- [Ubuntu 15.04/Debian](https://s3.amazonaws.com/erln8/binaries/ubuntu1504/erln8)
-- [Ubuntu 14.04/Debian](https://s3.amazonaws.com/erln8/binaries/ubuntu1404/erln8)
+- [Ubuntu 15.04/Debian](https://s3.amazonaws.com/erln8/binaries/ubuntu1504/erln8_ubuntu1504.tgz)
+- [Ubuntu 14.04/Debian](https://s3.amazonaws.com/erln8/binaries/ubuntu1404/erln8_ubuntu1404.tgz)
 
 ---
 
 ![Fedora](img/fedora_logo.png) &nbsp;&nbsp;&nbsp; ![CentOS](img/centos_logo.png) 
 
-- [Fedora/CentOS 7](https://s3.amazonaws.com/erln8/binaries/centos7/erln8)
-- [Fedora/CentOS 6](https://s3.amazonaws.com/erln8/binaries/centos6/erln8)
+- [Fedora/CentOS 7](https://s3.amazonaws.com/erln8/binaries/centos7/erln8_centos7.tgz)
+- [Fedora/CentOS 6](https://s3.amazonaws.com/erln8/binaries/centos6/erln8_centos6.tgz)
 
 --- 
 ![FreeBSD](img/freebsd_logo.png) FreeBSD (Currently unavailable)
