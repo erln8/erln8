@@ -47,21 +47,18 @@ You can also ask questions on the [erln8](https://groups.google.com/forum/?hl=en
 		- Go
 
 - But D is weird!
-	- so are kitten elbows
+	- so are kitten elbows. I try to minimize the impact by providing [precompiled binaries](installation.md).
 	
 - What does reo mean?
-	- Australian slang for "rebar"
+	- Australian [slang](https://en.wikipedia.org/wiki/Rebar) for "rebar"
 
 - Does erln8 support MS Windows?
 	- I don't own Windows, but if you want to submit PR's to support it and build precompiled binaries, I'll all for it.
 
-- Do you sing at parties?
-	-  No, not really.
-
 
 ## Getting help
 
-You can ask questions on the Freenode #erln8 IRC channel.
+You can ask questions on the Freenode `#erln8` IRC channel.
 
 You can also ask questions on the [erln8](https://groups.google.com/forum/?hl=en#!forum/erln8) mailing list.
 
