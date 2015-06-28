@@ -1,6 +1,6 @@
 # erln8
 
-Installation and usage docs [here]().
+Installation and usage docs [here](http://erln8.github.io/erln8/).
 
 # License
 
