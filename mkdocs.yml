@@ -1,0 +1,8 @@
+site_name: erln8
+theme: cosmo
+pages:
+- Home: index.md
+- Installation: installation.md
+- Quickstart: quickstart.md
+- Usage: usage.md
+- License &amp; Contributing: contributing.md
