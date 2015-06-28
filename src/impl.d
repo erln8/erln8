@@ -17,26 +17,28 @@ import log;
 enum RemoteOption { none, add, remove, show };
 
 struct CommandLineOptions {
-  string       opt_use       = null;
-  bool         opt_list      = false;
-  string       opt_clone     = null;
-  string       opt_fetch     = null;
-  string[]     opt_build   = null;
-  bool         opt_build_latest= false;
-  string       opt_repo      = null;
-  string       opt_id        = null;
-  string       opt_config    = null;
-  bool         opt_show      = false;
-  bool         opt_prompt    = false;
-  bool         opt_configs   = false;
-  bool         opt_repos     = false;
-  bool         opt_link      = false;
-  bool         opt_unlink    = false;
-  bool         opt_force     = false;
-  bool         opt_buildable = false;
-  bool         opt_debug     = false;
-  bool         opt_env       = false;
-  RemoteOption opt_remote = RemoteOption.none;
+  string       opt_use           = null;
+  bool         opt_list          = false;
+  string       opt_clone         = null;
+  string       opt_fetch         = null;
+  string[]     opt_build         = null;
+  bool         opt_build_latest  = false;
+  string       opt_repo          = null;
+  string       opt_id            = null;
+  string       opt_config        = null;
+  bool         opt_show          = false;
+  bool         opt_prompt        = false;
+  bool         opt_configs       = false;
+  bool         opt_repos         = false;
+  bool         opt_link          = false;
+  bool         opt_unlink        = false;
+  bool         opt_force         = false;
+  bool         opt_buildable     = false;
+  bool         opt_debug         = false;
+  bool         opt_env           = false;
+  string       opt_set_default   = null;
+  bool         opt_get_default   = false;
+  RemoteOption opt_remote        = RemoteOption.none;
   string[] allargs;
 }
 
@@ -294,5 +296,25 @@ class Impl {
         saveAppConfig(cfg);
       }
     }
+  }
+
+  void setSystemDefault(string configSection, string installedSection, string id) {
+    Ini cfg = getAppConfig();
+
+    IniSection installed = cfg.getSection(installedSection);
+    if(!installed.hasKey(id)) {
+      log_fatal("Invalid id specified");
+      exit(-1);
+    }
+    IniSection e8cfg = cfg.getSection(configSection);
+    e8cfg.setKey("system_default", id);
+    saveAppConfig(cfg);
+  }
+
+  void getSystemDefault(string configSection) {
+    Ini cfg = getAppConfig();
+    IniSection e8cfg = cfg.getSection(configSection);
+    writeln(e8cfg.getKey("system_default"));
+
   }
 }

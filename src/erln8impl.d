@@ -122,26 +122,28 @@ osx_gcc_env=CC=gcc-4.2 CPPFLAGS='-DNDEBUG' MAKEFLAGS='-j 3'k
         auto rslt = getopt(
             args,
             std.getopt.config.passThrough,
-            "use",       "Setup the current directory to use a specific verion of Erlang", &opts.opt_use,
-            "list",      "List available Erlang installations",      &opts.opt_list,
-            "remote",    "add/delete/show remotes", &opts.opt_remote,
-            "clone",     "Clone an Erlang source repository",  &opts.opt_clone,
-            "fetch",     "Update source repos",  &opts.opt_fetch,
-            "build",     "Build a specific version of OTP from source",  &opts.opt_build,
-            "build-latest", "Build the latest tagged version of OTP from source",  &opts.opt_build_latest,
-            "repo",      "Specifies repo name to build from",  &opts.opt_repo,
-            //"tag",       "Specifies repo branch/tag to build fro,",  &opts.opt_tag,
-            "id",        "A user assigned name for a version of Erlang",  &opts.opt_id,
-            "config",    "Build configuration",  &opts.opt_config,
-            "show",      "Show the configured version of Erlang in the current working directory",  &opts.opt_show,
-            "prompt",    "Display the version of Erlang configured for this part of the directory tree",  &opts.opt_prompt,
-            "configs",   "List build configs",  &opts.opt_configs,
-            "repos",     "List build repos",  &opts.opt_repos,
-            "link",      "Link a non-erln8 build of Erlang to erln8",  &opts.opt_link,
-            "unlink",    "Unlink a non-erln8 build of Erlang from erln8",  &opts.opt_unlink,
-            "force",     "Overwrite an erln8.config in the current directory",  &opts.opt_force,
-            "buildable", "List tags to build from configured source repos", &opts.opt_buildable,
-            "debug",     "Show debug output", &opts.opt_debug
+            "use",           "Setup the current directory to use a specific verion of Erlang", &opts.opt_use,
+            "list",          "List available Erlang installations",      &opts.opt_list,
+            "remote",        "add/delete/show remotes", &opts.opt_remote,
+            "clone",         "Clone an Erlang source repository",  &opts.opt_clone,
+            "fetch",         "Update source repos",  &opts.opt_fetch,
+            "build",         "Build a specific version of OTP from source",  &opts.opt_build,
+            "build-latest",   "Build the latest tagged version of OTP from source",  &opts.opt_build_latest,
+            "repo",          "Specifies repo name to build from",  &opts.opt_repo,
+            //"tag",         "Specifies repo branch/tag to build fro,",  &opts.opt_tag,
+            "id",            "A user assigned name for a version of Erlang",  &opts.opt_id,
+            "config",        "Build configuration",  &opts.opt_config,
+            "show",          "Show the configured version of Erlang in the current working directory",  &opts.opt_show,
+            "prompt",        "Display the version of Erlang configured for this part of the directory tree",  &opts.opt_prompt,
+            "configs",       "List build configs",  &opts.opt_configs,
+            "repos",         "List build repos",  &opts.opt_repos,
+            "set-default",   "Set the system-wide Erlang default", &opts.opt_set_default,
+            "get-default",   "Display the system-wide Erlang default",  &opts.opt_get_default,
+            "link",          "Link a non-erln8 build of Erlang to erln8",  &opts.opt_link,
+            "unlink",        "Unlink a non-erln8 build of Erlang from erln8",  &opts.opt_unlink,
+            "force",         "Overwrite an erln8.config in the current directory",  &opts.opt_force,
+            "buildable",     "List tags to build from configured source repos", &opts.opt_buildable,
+            "debug",         "Show debug output", &opts.opt_debug
               );
         if(showHelp && rslt.helpWanted) {
           // it's an Arrested Development joke
@@ -174,7 +176,9 @@ osx_gcc_env=CC=gcc-4.2 CPPFLAGS='-DNDEBUG' MAKEFLAGS='-j 3'k
       DirconfigResult dcr = getConfigFromCWD();
       auto dirini = dcr.ini;
       if(dirini.isNull) {
-        log_fatal("Can't find a configured version of Erlang");
+        log_info("Can't find a configured version of Erlang, system default will be used");
+        writeln("Erln8 system default:");
+        getSystemDefault("Erln8");
         exit(-1);
       }
 
@@ -420,6 +424,10 @@ osx_gcc_env=CC=gcc-4.2 CPPFLAGS='-DNDEBUG' MAKEFLAGS='-j 3'k
         doBuildLatest(cfg);
       } else if(currentOpts.opt_remote != RemoteOption.none) {
         doRemote(cfg);
+      } else if(currentOpts.opt_get_default) {
+        getSystemDefault("Erln8");
+      } else if(currentOpts.opt_set_default) {
+        setSystemDefault("Erln8", "Erlangs", currentOpts.opt_set_default);
       } else {
         log_debug("Nothing to do");
       }
@@ -440,7 +448,7 @@ osx_gcc_env=CC=gcc-4.2 CPPFLAGS='-DNDEBUG' MAKEFLAGS='-j 3'k
           log_debug("Using system_default ", e8cfg.getKey("system_default"));
           erlid = e8cfg.getKey("system_default");
         } else {
-          log_fatal("Can't find a configured version of Erlang");
+          log_fatal("Can't find a configured version of Erlang, using system default");
           exit(-1);
         }
       } else {
