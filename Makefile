@@ -1,3 +1,5 @@
+.PHONY: docs
+
 all:
 	dub build
 
