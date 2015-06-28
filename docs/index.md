@@ -19,6 +19,11 @@ erln8 v2 ships with 3 binaries:
 See the [installation](installation.md) and [quickstart](quickstart.md) guide.
 
 
+## Getting help
+
+You can ask questions on the Freenode #erln8 IRC channel.
+
+You can also ask questions on the [erln8](https://groups.google.com/forum/?hl=en#!forum/erln8) mailing list.
 
 
 ## FAQ
