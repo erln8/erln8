@@ -1,0 +1,134 @@
+{
+    "docs": [
+        {
+            "location": "/", 
+            "text": "What is erln8?\n\n\nernl8 v2 contains several tools that let a developer set custom versions of Erlang, Rebar, and Rebar3 per directory. This allows you to \"set and forget\" versions of your tools for a project once.\n\n\nerln8 v2 ships with 3 binaries:\n\n\n\n\nerln8\n - Erlang version manager, completely rewritten from the ground up.\n\n\nreo\n - Rebar version manager, uses the same core code that erln8 uses.\n\n\nreo3\n - Same as reo, but for Rebar3.\n\n\n\n\nGetting started\n\n\nSee the \ninstallation\n and \nquickstart\n guide.\n\n\nGetting help\n\n\nYou can ask questions on the Freenode #erln8 IRC channel.\n\n\nYou can also ask questions on the \nerln8\n mailing list.\n\n\nFAQ\n\n\n\n\n\n\nWhat language is it written in?\n\n\n\n\nD, it's super fast, easy, and it's not C++ or C.\n\n\n\n\n\n\n\n\nWhy isn't it written in Erlang?   \n\n\n\n\nchicken and egg, I never assumed you'd have Erlang built to be used by a tool that builds Erlang.\n\n\n\n\n\n\n\n\nNo really, why not \\\nlanguage X>?\n\n\n\n\nErlang is slow for command line tools, I wanted a tool that could be used in a command line prompt.\n\n\nI played around with implementing erln8 in the following, all of which weren't a great fit:\n\n\nC++\n\n\nRacket\n\n\nHaskell\n\n\nOCaml\n\n\nRust\n\n\nGo\n\n\n\n\n\n\n\n\n\n\n\n\nBut D is weird!\n\n\n\n\nso are kitten elbows\n\n\n\n\n\n\n\n\nWhat does reo mean?\n\n\n\n\nAustralian slang for \"rebar\"\n\n\n\n\n\n\n\n\nDoes erln8 support MS Windows?\n\n\n\n\nI don't own Windows, but if you want to submit PR's to support it and build precompiled binaries, I'll all for it.\n\n\n\n\n\n\n\n\nDo you sing at parties?\n\n\n\n\nNo, not really.\n\n\n\n\n\n\n\n\nGetting help\n\n\nYou can ask questions on the Freenode #erln8 IRC channel.\n\n\nYou can also ask questions on the \nerln8\n mailing list.\n\n\n\n\n\u00a9 2015 Dave Parfitt", 
+            "title": "Home"
+        }, 
+        {
+            "location": "/#what-is-erln8", 
+            "text": "ernl8 v2 contains several tools that let a developer set custom versions of Erlang, Rebar, and Rebar3 per directory. This allows you to \"set and forget\" versions of your tools for a project once.  erln8 v2 ships with 3 binaries:   erln8  - Erlang version manager, completely rewritten from the ground up.  reo  - Rebar version manager, uses the same core code that erln8 uses.  reo3  - Same as reo, but for Rebar3.", 
+            "title": "What is erln8?"
+        }, 
+        {
+            "location": "/#getting-started", 
+            "text": "See the  installation  and  quickstart  guide.", 
+            "title": "Getting started"
+        }, 
+        {
+            "location": "/#getting-help", 
+            "text": "You can ask questions on the Freenode #erln8 IRC channel.  You can also ask questions on the  erln8  mailing list.", 
+            "title": "Getting help"
+        }, 
+        {
+            "location": "/#faq", 
+            "text": "What language is it written in?   D, it's super fast, easy, and it's not C++ or C.     Why isn't it written in Erlang?      chicken and egg, I never assumed you'd have Erlang built to be used by a tool that builds Erlang.     No really, why not \\ language X>?   Erlang is slow for command line tools, I wanted a tool that could be used in a command line prompt.  I played around with implementing erln8 in the following, all of which weren't a great fit:  C++  Racket  Haskell  OCaml  Rust  Go       But D is weird!   so are kitten elbows     What does reo mean?   Australian slang for \"rebar\"     Does erln8 support MS Windows?   I don't own Windows, but if you want to submit PR's to support it and build precompiled binaries, I'll all for it.     Do you sing at parties?   No, not really.", 
+            "title": "FAQ"
+        }, 
+        {
+            "location": "/#getting-help_1", 
+            "text": "You can ask questions on the Freenode #erln8 IRC channel.  You can also ask questions on the  erln8  mailing list.   \u00a9 2015 Dave Parfitt", 
+            "title": "Getting help"
+        }, 
+        {
+            "location": "/installation/", 
+            "text": "Installation\n\n\nNOTE\n\n\nCurrently, erln8 won't generate the correct symlinks if you already have an \n~/.erln8.d\n from an older version. Move it out of the way before continuing.\n\n\nLatest Binary Releases\n\n\n \nOSX Yosemite\n\n\n\n\n \n \n \n\n\n\n\nUbuntu 15.04/Debian\n\n\nUbuntu 14.04/Debian\n\n\n\n\n\n\n \n \n \n\n\n\n\nFedora/CentOS 7\n\n\nFedora/CentOS 6\n\n\n\n\n\n\n FreeBSD (Currently unavailable)\n\n\n\n\nBuilding from source\n\n\nOSX Yosemite\n\n\nbrew upgrade # required to pull in a newer version of DMD\nbrew install dmd dub\n  # You MUST use DMD 2.076.1 or above\ngit clone https://github.com/erln8/reo.git\ncd reo\nmake\nmake install\n\n# erln8, reo, and reo3 are all installed in the local user home\n# at ~/.erln8.d/bin\n# YOU MUST ADD ~/.erln8.d/bin TO YOUR PATH!\n\n\n\n\nUbuntu 14.04 / 15.04\n\n\nsudo apt-get install build-essential libncurses5-dev openssl libssl-dev fop xsltproc unixodbc-dev libglib2.0-dev git autoconf\nsudo apt-get install xdg-utils\n\nwget http://downloads.dlang.org/releases/2.x/2.067.1/dmd_2.067.1-0_amd64.deb\nsudo dpkg -i dmd_2.067.1-0_amd64.deb\n\nwget http://code.dlang.org/files/dub-0.9.23-linux-x86_64.tar.gz\ntar xvzf dub-0.9.23-linux-x86_64.tar.gz\nsudo mv dub /usr/local/bin/dub\n\ngit clone https://github.com/erln8/reo.git\ncd reo\nmake\nmake install\n\n# erln8, reo, and reo3 are all installed in the local user home\n# at ~/.erln8.d/bin\n# YOU MUST ADD ~/.erln8.d/bin TO YOUR PATH!\n\n\n\n\nCentos 6 / 7\n\n\nsudo yum install gcc glibc-devel make ncurses-devel openssl-devel autoconf git wget\n\nwget http://downloads.dlang.org/releases/2.x/2.067.1/dmd-2.067.1-0.fedora.x86_64.rpm\nsudo yum install dmd-2.067.1-0.fedora.x86_64.rpm\n\nwget http://code.dlang.org/files/dub-0.9.23-1.x86_64.rpm\nsudo yum install dub-0.9.23-1.x86_64.rpm\n\n\ngit clone https://github.com/erln8/reo.git\ncd reo\nmake\nmake install\n\n# erln8, reo, and reo3 are all installed in the local user home\n# at ~/.erln8.d/bin\n# YOU MUST ADD ~/.erln8.d/bin TO YOUR PATH!\n\n\n\n\n\n\n\u00a9 2015 Dave Parfitt", 
+            "title": "Installation"
+        }, 
+        {
+            "location": "/installation/#installation", 
+            "text": "NOTE  Currently, erln8 won't generate the correct symlinks if you already have an  ~/.erln8.d  from an older version. Move it out of the way before continuing.", 
+            "title": "Installation"
+        }, 
+        {
+            "location": "/installation/#latest-binary-releases", 
+            "text": "OSX Yosemite           Ubuntu 15.04/Debian  Ubuntu 14.04/Debian            Fedora/CentOS 7  Fedora/CentOS 6     FreeBSD (Currently unavailable)", 
+            "title": "Latest Binary Releases"
+        }, 
+        {
+            "location": "/installation/#building-from-source", 
+            "text": "OSX Yosemite  brew upgrade # required to pull in a newer version of DMD\nbrew install dmd dub\n  # You MUST use DMD 2.076.1 or above\ngit clone https://github.com/erln8/reo.git\ncd reo\nmake\nmake install\n\n# erln8, reo, and reo3 are all installed in the local user home\n# at ~/.erln8.d/bin\n# YOU MUST ADD ~/.erln8.d/bin TO YOUR PATH!  Ubuntu 14.04 / 15.04  sudo apt-get install build-essential libncurses5-dev openssl libssl-dev fop xsltproc unixodbc-dev libglib2.0-dev git autoconf\nsudo apt-get install xdg-utils\n\nwget http://downloads.dlang.org/releases/2.x/2.067.1/dmd_2.067.1-0_amd64.deb\nsudo dpkg -i dmd_2.067.1-0_amd64.deb\n\nwget http://code.dlang.org/files/dub-0.9.23-linux-x86_64.tar.gz\ntar xvzf dub-0.9.23-linux-x86_64.tar.gz\nsudo mv dub /usr/local/bin/dub\n\ngit clone https://github.com/erln8/reo.git\ncd reo\nmake\nmake install\n\n# erln8, reo, and reo3 are all installed in the local user home\n# at ~/.erln8.d/bin\n# YOU MUST ADD ~/.erln8.d/bin TO YOUR PATH!  Centos 6 / 7  sudo yum install gcc glibc-devel make ncurses-devel openssl-devel autoconf git wget\n\nwget http://downloads.dlang.org/releases/2.x/2.067.1/dmd-2.067.1-0.fedora.x86_64.rpm\nsudo yum install dmd-2.067.1-0.fedora.x86_64.rpm\n\nwget http://code.dlang.org/files/dub-0.9.23-1.x86_64.rpm\nsudo yum install dub-0.9.23-1.x86_64.rpm\n\n\ngit clone https://github.com/erln8/reo.git\ncd reo\nmake\nmake install\n\n# erln8, reo, and reo3 are all installed in the local user home\n# at ~/.erln8.d/bin\n# YOU MUST ADD ~/.erln8.d/bin TO YOUR PATH!   \u00a9 2015 Dave Parfitt", 
+            "title": "Building from source"
+        }, 
+        {
+            "location": "/quickstart/", 
+            "text": "Quickstart\n\n\nIf you haven't installed erln8 yet, please do so by visiting the \ninstallation\n page.\n\n\nNote: I'd like these quickstarts to be as quick as possible, but Erlang takes quite a bit of time to build. The erln8 experience is best enjoyed while brewing your favorite beverage.\n\n\n\"Quickest\" start\n\n\nTo build the latest tagged version of Erlang from the OTP Git repo:\n\n\nerln8 --build-latest\nerln8 --list \n# cd to a project directory\nerln8 --use \nsome_version\n\n\n\n\n\nReplace \nsome_version\n with the version that was built via \n--build-latest\n.\n\n\nQuickstart\n\n\n# pick a version from\nerln8 --buildable\n# and then build it\nerln8 --build OTP_R16B03-1\n# then cd to a project directory\nerln8 --use OTP_R16B03-1\n\n\n\n\nSetting a version of Erlang, Rebar or Rebar3 in the current direcory\n\n\nerln8 --use OTP_R16B03-1\n# or if you've already set a version of Erlang in the CWD:\nerln8 --use OTP_R16B03-1 --force\n\n\n\n\nreo --use foo\n# or if you've already set a version of Rebar in the CWD:\nreo --use foo --force\n\n\n\n\nreo3 --use foo\n# or if you've already set a version of Rebar3 in the CWD:\nreo3 --use foo --force\n\n\n\n\n\n\n\u00a9 2015 Dave Parfitt", 
+            "title": "Quickstart"
+        }, 
+        {
+            "location": "/quickstart/#quickstart", 
+            "text": "If you haven't installed erln8 yet, please do so by visiting the  installation  page.  Note: I'd like these quickstarts to be as quick as possible, but Erlang takes quite a bit of time to build. The erln8 experience is best enjoyed while brewing your favorite beverage.  \"Quickest\" start  To build the latest tagged version of Erlang from the OTP Git repo:  erln8 --build-latest\nerln8 --list \n# cd to a project directory\nerln8 --use  some_version   Replace  some_version  with the version that was built via  --build-latest .  Quickstart  # pick a version from\nerln8 --buildable\n# and then build it\nerln8 --build OTP_R16B03-1\n# then cd to a project directory\nerln8 --use OTP_R16B03-1", 
+            "title": "Quickstart"
+        }, 
+        {
+            "location": "/quickstart/#setting-a-version-of-erlang-rebar-or-rebar3-in-the-current-direcory", 
+            "text": "erln8 --use OTP_R16B03-1\n# or if you've already set a version of Erlang in the CWD:\nerln8 --use OTP_R16B03-1 --force  reo --use foo\n# or if you've already set a version of Rebar in the CWD:\nreo --use foo --force  reo3 --use foo\n# or if you've already set a version of Rebar3 in the CWD:\nreo3 --use foo --force   \u00a9 2015 Dave Parfitt", 
+            "title": "Setting a version of Erlang, Rebar or Rebar3 in the current direcory"
+        }, 
+        {
+            "location": "/usage/", 
+            "text": "erln8, reo, and reo3 all share the same command line parameters.\n\n\nShowing the current version in a given directory\n\n\nerln8 --show\n\n\n\n\nThis command searches up the directory tree from the current working directory to find an \nerln8.config\n file containing a version of Erlang/Rebar/Rebar3 to use. If the root directory is reached without finding an \nerln8.config\n file, the erln8/reo/reo3 \nsystem_default\n is used. If a \nsystem_default\n isn't specified, the command will fail.\n\n\nListing installed versions\n\n\nerln8 --list\n\n\n\n\nListing buildable versions\n\n\nThis will list buildable tags across all configured repos. Note that you don't need to build from a tag, you can use a git SHA etc.\n\n\nerln8 --buildable\n\n\n\n\nBuilding\n\n\nBuilding the latest version\n\n\nIf you're confident that the local OTP/rebar/rebar3 repos are up-to-date, simply issue:\n\n\nerln8 --build-latest\n\n\n\n\nIt's always a good idea to run a fetch first though:\n\n\nerln8 --fetch default # fetches the default OTP repo\nerln8 --build-latest\n\n\n\n\nBuilding multiple versions at once\n\n\nYou can build multiple versions with one command:\n\n\nerln8 --build OTP_R16B03-1 --build OTP-17.0 --build OTP-18.0\n\n\n\n\nAdvanced Builds\n\n\nSetting and getting the system default\n\n\nerln8 --set-default OTP-18.0\n\n\n\n\nerln8 --get-default\n\n\n\n\nWorking with Git remotes\n\n\nCloning remotes\n\n\nFetching from remotes\n\n\nConfigs\n\n\nRepos\n\n\n\n\n\u00a9 2015 Dave Parfitt", 
+            "title": "Usage"
+        }, 
+        {
+            "location": "/usage/#showing-the-current-version-in-a-given-directory", 
+            "text": "erln8 --show  This command searches up the directory tree from the current working directory to find an  erln8.config  file containing a version of Erlang/Rebar/Rebar3 to use. If the root directory is reached without finding an  erln8.config  file, the erln8/reo/reo3  system_default  is used. If a  system_default  isn't specified, the command will fail.", 
+            "title": "Showing the current version in a given directory"
+        }, 
+        {
+            "location": "/usage/#listing-installed-versions", 
+            "text": "erln8 --list", 
+            "title": "Listing installed versions"
+        }, 
+        {
+            "location": "/usage/#listing-buildable-versions", 
+            "text": "This will list buildable tags across all configured repos. Note that you don't need to build from a tag, you can use a git SHA etc.  erln8 --buildable", 
+            "title": "Listing buildable versions"
+        }, 
+        {
+            "location": "/usage/#building", 
+            "text": "Building the latest version  If you're confident that the local OTP/rebar/rebar3 repos are up-to-date, simply issue:  erln8 --build-latest  It's always a good idea to run a fetch first though:  erln8 --fetch default # fetches the default OTP repo\nerln8 --build-latest  Building multiple versions at once  You can build multiple versions with one command:  erln8 --build OTP_R16B03-1 --build OTP-17.0 --build OTP-18.0", 
+            "title": "Building"
+        }, 
+        {
+            "location": "/usage/#advanced-builds", 
+            "text": "", 
+            "title": "Advanced Builds"
+        }, 
+        {
+            "location": "/usage/#setting-and-getting-the-system-default", 
+            "text": "erln8 --set-default OTP-18.0  erln8 --get-default", 
+            "title": "Setting and getting the system default"
+        }, 
+        {
+            "location": "/usage/#working-with-git-remotes", 
+            "text": "Cloning remotes  Fetching from remotes", 
+            "title": "Working with Git remotes"
+        }, 
+        {
+            "location": "/usage/#configs", 
+            "text": "", 
+            "title": "Configs"
+        }, 
+        {
+            "location": "/usage/#repos", 
+            "text": "\u00a9 2015 Dave Parfitt", 
+            "title": "Repos"
+        }, 
+        {
+            "location": "/contributing/", 
+            "text": "Contributing\n\n\nFork this repo, create a feature branch using something like this:\n\n\ngit checkout -b branch_name\n\n\n\n\nand submit a pull request. \n\n\nPlease send me an email (dparfitt at getchef dot com) and let me know if you want to work on any features.\n\n\nOnly friendly pull requests accepted.\n\n\nLicense\n\n\nhttp://www.apache.org/licenses/LICENSE-2.0.html\n\n\n\n\n\u00a9 2015 Dave Parfitt", 
+            "title": "License &amp; Contributing"
+        }, 
+        {
+            "location": "/contributing/#contributing", 
+            "text": "Fork this repo, create a feature branch using something like this:  git checkout -b branch_name  and submit a pull request.   Please send me an email (dparfitt at getchef dot com) and let me know if you want to work on any features.  Only friendly pull requests accepted.", 
+            "title": "Contributing"
+        }, 
+        {
+            "location": "/contributing/#license", 
+            "text": "http://www.apache.org/licenses/LICENSE-2.0.html   \u00a9 2015 Dave Parfitt", 
+            "title": "License"
+        }
+    ]
+}
