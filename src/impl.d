@@ -38,6 +38,7 @@ struct CommandLineOptions {
   bool         opt_env           = false;
   string       opt_set_default   = null;
   bool         opt_get_default   = false;
+  bool         opt_version       = false;
   RemoteOption opt_remote        = RemoteOption.none;
   string[] allargs;
 }

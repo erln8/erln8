@@ -87,8 +87,8 @@ LogLevel getLogLevel(Ini cfg) {
   }
 }
 
-void checkLinks() {
-  if(buildNormalizedPath(getConfigDir(), "bin", "erln8")
+void checkLinks(string argv0) {
+  if(buildNormalizedPath(getConfigDir(), "bin", argv0)
       != thisExePath()) {
     writeln("Please move erln8, reo, and reo3 to ~/.erln8.d/bin");
     exit(-1);
@@ -107,7 +107,6 @@ void main(string[] args) {
 
   log_debug("args:", args);
   erln8_home = defaultHome();
-  checkLinks();
   registerImpls();
   string binname = baseName(args[0]);
   log_debug("binname = ", binname);

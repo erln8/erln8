@@ -7,6 +7,8 @@ import std.stdio;
 import dini;
 import log;
 
+const erln8_version = "2.0beta0";
+
 string defaultHome() {
   try {
     string home = environment["ERLN8_HOME"];

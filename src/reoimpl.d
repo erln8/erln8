@@ -108,6 +108,7 @@ EOS"
             "unlink",    "Unlink a non-reo build of Rebar from reo",  &opts.opt_unlink,
             "force",     "Overwrite an erln8.config in the current directory",  &opts.opt_force,
             "buildable", "List tags to build from configured source repos", &opts.opt_buildable,
+            "version",   "Show the installed version of reo", &opts.opt_version,
             "debug",     "Show debug output", &opts.opt_debug
               );
         if(showHelp && rslt.helpWanted) {
@@ -374,6 +375,8 @@ EOS"
         foreach(b;currentOpts.opt_build) {
           doBuild(cfg, b);
         }
+      } else if(currentOpts.opt_version) {
+        writeln(name, " ", erln8_version); 
       } else {
         log_debug("Nothing to do");
       }

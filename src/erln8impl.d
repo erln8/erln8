@@ -143,6 +143,7 @@ osx_gcc_env=CC=gcc-4.2 CPPFLAGS='-DNDEBUG' MAKEFLAGS='-j 3'k
             "unlink",        "Unlink a non-erln8 build of Erlang from erln8",  &opts.opt_unlink,
             "force",         "Overwrite an erln8.config in the current directory",  &opts.opt_force,
             "buildable",     "List tags to build from configured source repos", &opts.opt_buildable,
+            "version",       "Show the installed version of erln8", &opts.opt_version,
             "debug",         "Show debug output", &opts.opt_debug
               );
         if(showHelp && rslt.helpWanted) {
@@ -428,6 +429,8 @@ osx_gcc_env=CC=gcc-4.2 CPPFLAGS='-DNDEBUG' MAKEFLAGS='-j 3'k
         getSystemDefault("Erln8");
       } else if(currentOpts.opt_set_default) {
         setSystemDefault("Erln8", "Erlangs", currentOpts.opt_set_default);
+      } else if(currentOpts.opt_version) {
+        writeln(name, " ", erln8_version);
       } else {
         log_debug("Nothing to do");
       }
