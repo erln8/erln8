@@ -4,5 +4,6 @@ pages:
 - Home: index.md
 - Installation: installation.md
 - Quickstart: quickstart.md
-- Usage: usage.md
+- erln8 Usage: usage.md
+- reo Usage: usage.md
 - License &amp; Contributing: contributing.md
