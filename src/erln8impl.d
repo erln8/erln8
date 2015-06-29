@@ -236,7 +236,7 @@ osx_gcc_env=CC=gcc-4.2 CPPFLAGS='-DNDEBUG' MAKEFLAGS='-j 3'k
       ErlangBuildOptions opts;
       opts.repo = (repo == null ? "default" : repo);
       opts.tag = tag;
-      if(opts.id == null) {
+      if(id == null) {
         opts.id  = tag;
       } else {
         opts.id  = id;

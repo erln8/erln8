@@ -69,7 +69,7 @@ Building from an alternate repo:
 erln8 --build origin/basho-otp-18 --repo basho --id basho18
 ```
 
-Note: the `origin/` prefix is required when working with repos other than `default`.
+Note: the `origin/` prefix may be required when working with repos other than `default`.
 
 
 ## Repos + Multiple Repositories
