@@ -9,7 +9,7 @@
         
         <link rel="shortcut icon" href="../img/favicon.ico">
 
-	<title>Usage - erln8</title>
+	<title>reo Usage - erln8</title>
 
         <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
         <link href="../css/font-awesome-4.0.3.css" rel="stylesheet">
@@ -68,8 +68,14 @@
             
             
             
+                <li >
+                    <a href="./">erln8 Usage</a>
+                </li>
+            
+            
+            
                 <li class="active">
-                    <a href="./">Usage</a>
+                    <a href="./">reo Usage</a>
                 </li>
             
             
@@ -84,7 +90,7 @@
             <!-- Search, Navigation and Repo links -->
             <ul class="nav navbar-nav navbar-right">
                 <li >
-                    <a rel="next" href="../quickstart/">
+                    <a rel="next" href="./">
                         <i class="fa fa-arrow-left"></i> Previous
                     </a>
                 </li>
@@ -103,16 +109,18 @@
             <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
     
-        <li class="main active"><a href="#showing-the-current-version-in-a-given-directory">Showing the current version in a given directory</a></li>
+        <li class="main active"><a href="#environment">Environment</a></li>
         
-    
-        <li class="main "><a href="#listing-installed-versions">Listing installed versions</a></li>
+            <li><a href="#showing-the-current-version-in-a-given-directory">Showing the current version in a given directory</a></li>
         
-    
-        <li class="main "><a href="#listing-buildable-versions">Listing buildable versions</a></li>
+            <li><a href="#listing-installed-versions">Listing installed versions</a></li>
+        
+            <li><a href="#setting-and-getting-the-system-default">Setting and getting the system default</a></li>
         
     
         <li class="main "><a href="#building">Building</a></li>
+        
+            <li><a href="#listing-buildable-versions">Listing buildable versions</a></li>
         
             <li><a href="#building-the-latest-version">Building the latest version</a></li>
         
@@ -122,10 +130,11 @@
         <li class="main "><a href="#advanced-builds">Advanced Builds</a></li>
         
     
-        <li class="main "><a href="#setting-and-getting-the-system-default">Setting and getting the system default</a></li>
+        <li class="main "><a href="#repos-multiple-repositories">Repos + Multiple Repositories</a></li>
         
-    
-        <li class="main "><a href="#working-with-git-remotes">Working with Git remotes</a></li>
+            <li><a href="#display-a-list-of-configured-repos">Display a list of configured repos</a></li>
+        
+            <li><a href="#adding-and-removing-remotes">Adding and removing remotes</a></li>
         
             <li><a href="#cloning-remotes">Cloning remotes</a></li>
         
@@ -134,8 +143,18 @@
     
         <li class="main "><a href="#configs">Configs</a></li>
         
+            <li><a href="#environment-variables">Environment variables</a></li>
+        
     
-        <li class="main "><a href="#repos">Repos</a></li>
+        <li class="main "><a href="#erln8-config-parameters">erln8 config parameters</a></li>
+        
+            <li><a href="#erln8">Erln8</a></li>
+        
+            <li><a href="#repos">Repos</a></li>
+        
+            <li><a href="#erlangs">Erlangs</a></li>
+        
+            <li><a href="#configs_1">Configs</a></li>
         
     
     </ul>
@@ -143,21 +162,30 @@
             <div class="col-md-9" role="main">
 
 <p>erln8, reo, and reo3 all share the same command line parameters.</p>
-<h2 id="showing-the-current-version-in-a-given-directory">Showing the current version in a given directory</h2>
+<h2 id="environment">Environment</h2>
+<h3 id="showing-the-current-version-in-a-given-directory">Showing the current version in a given directory</h3>
 <pre><code class="text">erln8 --show
 </code></pre>
 
 <p>This command searches up the directory tree from the current working directory to find an <code>erln8.config</code> file containing a version of Erlang/Rebar/Rebar3 to use. If the root directory is reached without finding an <code>erln8.config</code> file, the erln8/reo/reo3 <code>system_default</code> is used. If a <code>system_default</code> isn't specified, the command will fail.</p>
-<h2 id="listing-installed-versions">Listing installed versions</h2>
+<h3 id="listing-installed-versions">Listing installed versions</h3>
 <pre><code class="text">erln8 --list
 </code></pre>
 
-<h2 id="listing-buildable-versions">Listing buildable versions</h2>
+<h3 id="setting-and-getting-the-system-default">Setting and getting the system default</h3>
+<p>If erln8 can't find an <code>erln8.config</code> file in the current and all parent directories (stopping at <code>/</code>), the system default will be used.</p>
+<pre><code class="text">erln8 --set-default OTP-18.0
+</code></pre>
+
+<pre><code class="text">erln8 --get-default
+</code></pre>
+
+<h2 id="building">Building</h2>
+<h3 id="listing-buildable-versions">Listing buildable versions</h3>
 <p>This will list buildable tags across all configured repos. Note that you don't need to build from a tag, you can use a git SHA etc.</p>
 <pre><code class="text">erln8 --buildable
 </code></pre>
 
-<h2 id="building">Building</h2>
 <h3 id="building-the-latest-version">Building the latest version</h3>
 <p>If you're confident that the local OTP/rebar/rebar3 repos are up-to-date, simply issue:</p>
 <pre><code class="text">erln8 --build-latest
@@ -174,18 +202,133 @@ erln8 --build-latest
 </code></pre>
 
 <h2 id="advanced-builds">Advanced Builds</h2>
-<h2 id="setting-and-getting-the-system-default">Setting and getting the system default</h2>
-<pre><code class="text">erln8 --set-default OTP-18.0
+<p>Building from an alternate repo:</p>
+<pre><code>erln8 --build origin/basho-otp-18 --repo basho --id basho18
 </code></pre>
 
-<pre><code class="text">erln8 --get-default
+<p>Note: the <code>origin/</code> prefix is required when working with repos other than <code>default</code>.</p>
+<h2 id="repos-multiple-repositories">Repos + Multiple Repositories</h2>
+<p>The default erln8 repo is the canonical OTP repository <code>https://github.com/erlang/otp.git</code>. You can, however, build from multiple repos.</p>
+<h3 id="display-a-list-of-configured-repos">Display a list of configured repos</h3>
+<pre><code>erln8 --repos
+default -&gt; https://github.com/erlang/otp.git
+basho -&gt; https://github.com/basho/otp.git
 </code></pre>
 
-<h2 id="working-with-git-remotes">Working with Git remotes</h2>
+<h3 id="adding-and-removing-remotes">Adding and removing remotes</h3>
+<p>You can add additional repos to build Erlang from via <code>--remote add</code>:</p>
+<pre><code>erln8 --remote add basho https://github.com/basho/otp.git
+erln8 --clone basho
+</code></pre>
+
+<p>You must clone each repo after it's added. </p>
 <h3 id="cloning-remotes">Cloning remotes</h3>
 <h3 id="fetching-from-remotes">Fetching from remotes</h3>
+<p>To pull down new git objects from the default OTP repository:</p>
+<pre><code>erln8 --fetch default
+# pull down objects from a repo named &quot;basho&quot;
+erln8 --fetch basho
+</code></pre>
+
 <h2 id="configs">Configs</h2>
-<h2 id="repos">Repos</h2>
+<p>You can specify an Erlang build config via the <code>--config</code> parameter, or via the <code>[Erln8]</code>/<code>default_config</code> value in <code>~/.erln8.d/config</code>.</p>
+<h3 id="environment-variables">Environment variables</h3>
+<p>To provide environment variables to a build, create a custom config and an config environment. A config environment is the name of the config followed by <code>_env</code> in the <code>[Config]</code> section of <code>~/.erln8.d/config</code>.</p>
+<p>For example, the config <code>osx_gcc</code> has a <code>osx_gcc_env</code> config environment that will be passed to the build when using <code>erln8 --build foo --config osx_gcc</code>:</p>
+<pre><code>osx_gcc=--disable-hipe --enable-smp-support --enable-threads --enable-kernel-poll --enable-darwin-64bit
+osx_gcc_env=CC=gcc-4.2 CPPFLAGS='-DNDEBUG' MAKEFLAGS='-j 3'k
+</code></pre>
+
+<h2 id="erln8-config-parameters">erln8 config parameters</h2>
+<p>The erln8 configuration file <code>~/.erln8.d/config</code> contains several parameters that you can tweak.</p>
+<h3 id="erln8">Erln8</h3>
+<p>The <code>[Erln8]</code> section allows you to specify the following parameters:</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>default_config</code></td>
+<td>The default configuration to use for all builds, unless overriden by <code>--config</code>.</td>
+</tr>
+<tr>
+<td><code>system_default</code></td>
+<td>The version to use as a system-wide default. See <code>--get-default</code> and <code>--set-default</code>.</td>
+</tr>
+<tr>
+<td><code>log_level</code></td>
+<td>valid values are <code>error</code> or <code>info</code></td>
+</tr>
+<tr>
+<td><code>color</code></td>
+<td><strong>unimplemented in erln8 v2</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="repos">Repos</h3>
+<p>The <code>[Repos]</code> section allows you to manually configure OTP repos to build from.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>default</code></td>
+<td>The canonical Erlang OTP repo: <code>https://github.com/erlang/otp.git</code>. This repo must exist for erln8 to work.</td>
+</tr>
+<tr>
+<td>\&lt;repo_name></td>
+<td>A custom repo with the name repo_name at url repo_url. \&lt;repo_name>=\&lt;repo_url></td>
+</tr>
+</tbody>
+</table>
+<h3 id="erlangs">Erlangs</h3>
+<p>The <code>[Erlangs]</code> section maintains a list of Erlang versions that have been built by erln8.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>none</code></td>
+<td>No Erlang configured at this location. Probably not useful to you!</td>
+</tr>
+</tbody>
+</table>
+<h3 id="configs_1">Configs</h3>
+<p>The <code>[Configs]</code> section maintains a list build configurations for Erlang.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>default</code></td>
+<td>Empty build configuration.</td>
+</tr>
+<tr>
+<td>\&lt;config_name></td>
+<td>Custom build flags to pass to the Erlang build</td>
+</tr>
+<tr>
+<td>\&lt;config_name>_env</td>
+<td>Custom build environment variables to pass to the Erlang build</td>
+</tr>
+</tbody>
+</table>
 <hr />
 <p>© 2015 Dave Parfitt</p></div>
         </div>
