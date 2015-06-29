@@ -269,12 +269,11 @@ osx_gcc_env=CC=gcc-4.2 CPPFLAGS='-DNDEBUG' MAKEFLAGS='-j 3'k
         exit(-1);
       }
 
-      // TODO
-      //auto configs = cfg["Configs"].keys();
-      //if(!(build_options.configname in configs)) {
-      //  writeln("Unknown build config: ", build_options.configname);
-      //  exit(-1);
-      // }
+      auto configs = cfg["Configs"].keys();
+      if(!(build_options.configname in configs)) {
+        writeln("Unknown build config: ", build_options.configname);
+        exit(-1);
+       }
 
     }
 
@@ -344,12 +343,16 @@ osx_gcc_env=CC=gcc-4.2 CPPFLAGS='-DNDEBUG' MAKEFLAGS='-j 3'k
       checkObject(opts, sourcePath);
       string makeBin = getMakeBin();
 
-      // TODO: build config _env
+      string configenvname = opts.configname ~ "_env";
       string env = "";
+      if(cfg["Configs"].hasKey(configenvname)) {
+        env = cfg["Configs"].getKey(configenvname);
+      }
 
       log_debug("Output root = ", outputRoot);
       log_debug("Output path = ", outputPath);
       log_debug("Source path = ", sourcePath);
+      log_debug("Config env  = ", env);
 
       string tmp = buildNormalizedPath(tempDir(), getTimestampedFilename());
       log_debug("tmp dir = ", tmp);
