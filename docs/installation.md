@@ -6,8 +6,17 @@
 
 ## Latest Binary Releases
 
+To install from a binary package:
 
-![OSX Yosemite](img/apple_logo.png) [OSX Yosemite](https://s3.amazonaws.com/erln8/binaries/osx10.10/erln8_osx.tgz)
+```
+tar xvzf ./erln8_<platform>.tgz
+cd erln8_<platform>
+./install.sh
+```
+
+![OSX Yosemite](img/apple_logo.png) 
+
+- [OSX Yosemite](https://s3.amazonaws.com/erln8/binaries/osx10.10/erln8_osx.tgz)
 
 ---
 
