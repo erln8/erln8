@@ -1,12 +1,12 @@
 mkdir -p ./erln8
 docker build -t reo/builder_centos7 .
 docker run -i -v ${PWD}/erln8:/erln8 reo/builder_centos7 << COMMANDS
-git clone https://github.com/erln8/erln8.git
-cd /erln8
+git clone https://github.com/erln8/erln8.git reo
+cd /reo
 dub build
-cp /erln8/reo /erln8/erln8
-cp /erln8/reo /erln8/reo
-cp /erln8/reo /erln8/reo3
+cp /reo/reo /erln8/erln8
+cp /reo/reo /erln8/reo
+cp /reo/reo /erln8/reo3
 COMMANDS
 cp ../../LICENSE ./erln8/
 cp ../install.sh ./erln8/
