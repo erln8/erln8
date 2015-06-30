@@ -95,6 +95,14 @@ void checkLinks(string argv0) {
   }
 }
 
+void checkForGit() {
+  auto gs = executeShell("which git");
+  if(gs.status != 0) {
+    log_fatal("git is required to run erln8, reo and reo3");
+    exit(-1);
+  }
+}
+
 void main(string[] args) {
 
   if(canFind(args, "--debug")) {
@@ -102,10 +110,10 @@ void main(string[] args) {
   } else {
     log_level = LogLevel.ERROR;
   }
-
   log_debug("log_level = ", log_level);
 
   log_debug("args:", args);
+  checkForGit();
   erln8_home = defaultHome();
   registerImpls();
   string binname = baseName(args[0]);
