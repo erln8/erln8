@@ -232,7 +232,7 @@ osx_gcc_env=CC=gcc-4.2 CPPFLAGS='-DNDEBUG' MAKEFLAGS='-j 3'k
     }
 
 
-    ErlangBuildOptions getBuildOptions(string repo, string tag, string id, string configname) {
+    ErlangBuildOptions getBuildOptions(Ini cfg, string repo, string tag, string id, string configname) {
       ErlangBuildOptions opts;
       opts.repo = (repo == null ? "default" : repo);
       opts.tag = tag;
@@ -241,9 +241,16 @@ osx_gcc_env=CC=gcc-4.2 CPPFLAGS='-DNDEBUG' MAKEFLAGS='-j 3'k
       } else {
         opts.id  = id;
       }
-      // TODO: use Erlang.default_config value here
-      //opts.configname = (configname == null ? "default_config" : configname);
-      opts.configname = configname;
+      if(configname == null || configname == "") {
+        if(cfg["Erln8"].hasKey("default_config")) {
+          opts.configname = cfg["Erln8"].getKey("default_config");
+        } else {
+          opts.configname = "default";
+        }
+      } else {
+        opts.configname = configname;
+      }
+
       return opts;
     }
 
@@ -270,7 +277,10 @@ osx_gcc_env=CC=gcc-4.2 CPPFLAGS='-DNDEBUG' MAKEFLAGS='-j 3'k
       }
 
       auto configs = cfg["Configs"].keys();
-      if(!(build_options.configname in configs)) {
+      if(build_options.configname == null || build_options.configname == "") {
+        // default
+        log_debug("Using default config");
+      } else if(!(build_options.configname in configs)) {
         writeln("Unknown build config: ", build_options.configname);
         exit(-1);
        }
@@ -329,7 +339,9 @@ osx_gcc_env=CC=gcc-4.2 CPPFLAGS='-DNDEBUG' MAKEFLAGS='-j 3'k
 
 
     override void doBuild(Ini cfg, string tag) {
-      ErlangBuildOptions opts = getBuildOptions(currentOpts.opt_repo,
+      ErlangBuildOptions opts =
+        getBuildOptions(cfg,
+          currentOpts.opt_repo,
           tag,
           currentOpts.opt_id,
           currentOpts.opt_config);
@@ -352,6 +364,7 @@ osx_gcc_env=CC=gcc-4.2 CPPFLAGS='-DNDEBUG' MAKEFLAGS='-j 3'k
       log_debug("Output root = ", outputRoot);
       log_debug("Output path = ", outputPath);
       log_debug("Source path = ", sourcePath);
+      log_debug("Config      = ", opts.configname);
       log_debug("Config env  = ", env);
 
       string tmp = buildNormalizedPath(tempDir(), getTimestampedFilename());
