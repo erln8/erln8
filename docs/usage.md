@@ -166,7 +166,13 @@ The `[Configs]` section maintains a list build configurations for Erlang.
 | <config_name\> | Custom build flags to pass to the Erlang build |
 | <config_name\>\_env | Custom build environment variables to pass to the Erlang build |
 
+## Regenerating erln8 links
 
+If the links in `~/.erln8.d/bin` become invalid, or the binary moves, you can recreate them with:
+
+```
+erln8 --setup-bins
+```
 
 ---
 
