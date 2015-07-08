@@ -2,8 +2,6 @@
 
 #### NOTE
 
-***Currently, erln8 won't generate the correct symlinks if you already have an `~/.erln8.d` from an older version. Move it out of the way before continuing.***
-
 ## Latest Binary Releases
 
 To install from a binary package:

@@ -60,14 +60,6 @@ void registerImpls() {
   registerImpl(reo3);
 }
 
-void initImpls() {
-  foreach(k,v; impls) {
-    log_debug("Calling into on impl ", k);
-    v.init();
-  }
-}
-
-
 // LogLevel
 //Erln8.log_level
 LogLevel getLogLevel(Ini cfg) {

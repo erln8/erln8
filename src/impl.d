@@ -60,6 +60,7 @@ class Impl {
   abstract string[] getSymlinkedExecutables();
   abstract void processArgs(string[] args, bool showHelp);
   abstract void doBuild(Ini cfg, string tag);
+  abstract string[] getBins();
 
   void setupBins() {
     auto binPath = buildNormalizedPath(getConfigDir(), "bin");
@@ -69,7 +70,7 @@ class Impl {
     foreach(bin;getSymlinkedExecutables()) {
       auto linkTo = buildNormalizedPath(binPath, baseName(bin));
       try {
-        writeln("Creating symlink for ", baseName(linkTo));
+        //writeln("Creating symlink for ", baseName(linkTo));
         symlink(thisExePath(), linkTo);
       } catch (Exception e) {
         writeln("Could not link: ", e.msg, ". Ok to continue.");
@@ -122,7 +123,9 @@ class Impl {
 
 
   void init() {
-    if(exists(buildNormalizedPath(getConfigDir(), appConfigName))) {
+    string firstBin = baseName(getBins()[0]);
+    string firstLinked = buildNormalizedPath(getConfigDir(), "bin", firstBin);
+    if(exists(firstLinked)) {
       log_debug(name ~ " has already been initialized");
       return;
     } else {
@@ -154,7 +157,7 @@ class Impl {
     log_debug(keys);
     foreach(k,v;keys) {
       log_debug("Listing buildable in repo ", k, " @ ", v);
-
+      writeln("Tags in repo ", k, ":");
       string currentRepoDir = buildNormalizedPath(repodir, k);
       log_debug(currentRepoDir);
       string cmd = "cd " ~ currentRepoDir ~ " && git tag | sort | pr -3 -t";

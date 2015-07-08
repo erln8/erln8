@@ -64,6 +64,10 @@ string[] bins = [
       IdKey = "Erlangs";
     }
 
+    override string[] getBins() {
+      return bins;
+    }
+
     override void initOnce() {
       if(exists(buildNormalizedPath(getConfigDir(), "bin", "erl"))) {
         log_debug("Erln8 has already been initialized");
@@ -110,8 +114,6 @@ osx_gcc_env=CC=gcc-4.2 CPPFLAGS='-DNDEBUG' MAKEFLAGS='-j 3'k
 
       setupBins();
 
-      Ini cfg = getAppConfig();
-      doClone(cfg, "default");
     }
 
 

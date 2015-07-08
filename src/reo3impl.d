@@ -42,6 +42,10 @@ class Reo3Impl : Impl {
       reosectionname = "Reo3";
     }
 
+    override string[] getBins() {
+      return bins;
+    }
+
     override void initOnce() {
       log_debug("reo3 init once");
 
@@ -79,8 +83,8 @@ EOS"
 
       setupBins();
 
-      Ini cfg = getAppConfig();
-      doClone(cfg, "default");
+      //Ini cfg = getAppConfig();
+      //doClone(cfg, "default");
     }
 
     override void processArgs(string[] args, bool showHelp) {
