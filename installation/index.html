@@ -118,7 +118,6 @@
 
 <h1 id="installation">Installation</h1>
 <h4 id="note">NOTE</h4>
-<p><strong><em>Currently, erln8 won't generate the correct symlinks if you already have an <code>~/.erln8.d</code> from an older version. Move it out of the way before continuing.</em></strong></p>
 <h2 id="latest-binary-releases">Latest Binary Releases</h2>
 <p>To install from a binary package:</p>
 <pre><code>tar xvzf ./erln8_&lt;platform&gt;.tgz
@@ -147,6 +146,11 @@ cd erln8_&lt;platform&gt;
 <hr />
 <h2 id="building-from-source">Building from source</h2>
 <h3 id="osx-yosemite">OSX Yosemite</h3>
+<p>The easiest way is via Homebrew:</p>
+<pre><code>brew install https://raw.githubusercontent.com/erln8/homebrew/erln8_v2/Library/Formula/erln8.rb
+</code></pre>
+
+<p>To build manually, use the following:</p>
 <pre><code class="text">brew upgrade # required to pull in a newer version of DMD
 brew install dmd dub
   # You MUST use DMD 2.076.1 or above
