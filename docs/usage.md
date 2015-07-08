@@ -144,7 +144,7 @@ The `[Repos]` section allows you to manually configure OTP repos to build from.
 | Parameter | Description |
 |-----------|-------------|
 | `default` | The canonical Erlang OTP repo: `https://github.com/erlang/otp.git`. This repo must exist for erln8 to work. |
-| \<repo_name\> | A custom repo with the name repo_name at url repo_url. \<repo_name\>=\<repo_url\> |
+| <repo_name\> | A custom repo with the name repo_name at url repo_url. \<repo_name\>=\<repo_url\> |
 
 
 ### Erlangs
@@ -163,8 +163,8 @@ The `[Configs]` section maintains a list build configurations for Erlang.
 | Parameter | Description |
 |-----------|-------------|
 | `default` | Empty build configuration. |
-| \<config_name\> | Custom build flags to pass to the Erlang build |
-| \<config_name\>\_env | Custom build environment variables to pass to the Erlang build |
+| <config_name\> | Custom build flags to pass to the Erlang build |
+| <config_name\>\_env | Custom build environment variables to pass to the Erlang build |
 
 
 
