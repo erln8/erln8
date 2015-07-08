@@ -144,6 +144,7 @@ osx_gcc_env=CC=gcc-4.2 CPPFLAGS='-DNDEBUG' MAKEFLAGS='-j 3'k
             "force",         "Overwrite an erln8.config in the current directory",  &opts.opt_force,
             "buildable",     "List tags to build from configured source repos", &opts.opt_buildable,
             "version",       "Show the installed version of erln8", &opts.opt_version,
+            "setup-bins",    "Regenerate erln8-managed OTP application links", &opts.opt_setup_bins,
             "debug",         "Show debug output", &opts.opt_debug
               );
         if(showHelp && rslt.helpWanted) {
@@ -447,6 +448,8 @@ osx_gcc_env=CC=gcc-4.2 CPPFLAGS='-DNDEBUG' MAKEFLAGS='-j 3'k
         setSystemDefault("Erln8", "Erlangs", currentOpts.opt_set_default);
       } else if(currentOpts.opt_version) {
         writeln(name, " ", erln8_version);
+      } else if(currentOpts.opt_setup_bins) {
+        doSetupBins(cfg); 
       } else {
         log_debug("Nothing to do");
       }
@@ -467,7 +470,7 @@ osx_gcc_env=CC=gcc-4.2 CPPFLAGS='-DNDEBUG' MAKEFLAGS='-j 3'k
           log_debug("Using system_default ", e8cfg.getKey("system_default"));
           erlid = e8cfg.getKey("system_default");
         } else {
-          log_fatal("Can't find a configured version of Erlang, using system default");
+          log_fatal("Can't find a configured version of Erlang, system default unavailable");
           exit(-1);
         }
       } else {

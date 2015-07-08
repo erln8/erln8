@@ -39,6 +39,7 @@ struct CommandLineOptions {
   string       opt_set_default   = null;
   bool         opt_get_default   = false;
   bool         opt_version       = false;
+  bool         opt_setup_bins    = false;
   RemoteOption opt_remote        = RemoteOption.none;
   string[] allargs;
 }
@@ -68,6 +69,7 @@ class Impl {
     foreach(bin;getSymlinkedExecutables()) {
       auto linkTo = buildNormalizedPath(binPath, baseName(bin));
       try {
+        writeln("Creating symlink for ", baseName(linkTo));
         symlink(thisExePath(), linkTo);
       } catch (Exception e) {
         writeln("Could not link: ", e.msg, ". Ok to continue.");
@@ -193,6 +195,10 @@ class Impl {
     foreach(k,v;keys) {
       writeln(k," -> ", v);
     }
+  }
+
+  void doSetupBins(Ini cfg) {
+    setupBins();
   }
 
   void doClone(Ini cfg) {

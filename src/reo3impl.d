@@ -109,6 +109,7 @@ EOS"
             "force",     "Overwrite an erln8.config in the current directory",  &opts.opt_force,
             "buildable", "List tags to build from configured source repos", &opts.opt_buildable,
             "version",   "Show the installed version of reo3", &opts.opt_version,
+            "setup-bins",    "Regenerate erln8-managed OTP application links", &opts.opt_setup_bins,
             "debug",     "Show debug output", &opts.opt_debug
               );
         if(showHelp && rslt.helpWanted) {
@@ -377,6 +378,8 @@ EOS"
         }
       } else if(currentOpts.opt_version) {
         writeln(name, " ", erln8_version);
+      } else if(currentOpts.opt_setup_bins) {
+        doSetupBins(cfg); 
       } else {
         log_debug("Nothing to do");
       }
