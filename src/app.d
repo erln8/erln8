@@ -79,13 +79,6 @@ LogLevel getLogLevel(Ini cfg) {
   }
 }
 
-void checkLinks(string argv0) {
-  if(buildNormalizedPath(getConfigDir(), "bin", argv0)
-      != thisExePath()) {
-    writeln("Please move erln8, reo, and reo3 to ~/.erln8.d/bin");
-    exit(-1);
-  }
-}
 
 void checkForGit() {
   auto gs = executeShell("which git");

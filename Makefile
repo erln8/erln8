@@ -23,3 +23,6 @@ clean:
 
 docs:
 	mkdocs gh-deploy --clean
+
+release:
+	./release.sh
