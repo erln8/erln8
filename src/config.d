@@ -7,7 +7,7 @@ import std.stdio;
 import dini;
 import log;
 
-const erln8_version = "2.0beta0";
+const erln8_version = "2.0beta1";
 
 string defaultHome() {
   try {
