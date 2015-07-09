@@ -30,30 +30,18 @@ You can also ask questions on the [erln8](https://groups.google.com/forum/?hl=en
 
 ## FAQ
 
+- Does erln8 support MS Windows?
+	- I don't own Windows, but if you want to submit PR's to support it and build precompiled binaries, I'll all for it.
+
 - What language is it written in?
 	- D, it's super fast, easy, and it's not C++ or C.
 
 - Why isn't it written in Erlang?	
 	- chicken and egg, I never assumed you'd have Erlang built to be used by a tool that builds Erlang.
-
-- No really, why not \<language X\>?
-	- Erlang is slow for command line tools, I wanted a tool that could be used in a command line prompt.
-	- I played around with implementing erln8 in the following, all of which weren't a great fit:
-		- C++
-		- Racket
-		- Haskell
-		- OCaml
-		- Rust
-		- Go
-
-- But D is weird!
-	- so are kitten elbows. I try to minimize the impact by providing [precompiled binaries](installation.md).
 	
 - What does reo mean?
 	- Australian [slang](https://en.wikipedia.org/wiki/Rebar) for "rebar"
 
-- Does erln8 support MS Windows?
-	- I don't own Windows, but if you want to submit PR's to support it and build precompiled binaries, I'll all for it.
 
 
 ## Getting help
