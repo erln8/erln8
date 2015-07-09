@@ -9,7 +9,7 @@ To build the latest tagged version of Erlang from the OTP Git repo:
 
 ```text
 erln8 --build-latest
-erln8 --list 
+erln8 --list
 # cd to a project directory
 erln8 --use <some_version>
 ```
