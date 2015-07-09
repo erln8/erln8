@@ -93,7 +93,7 @@ erln8 --remote add basho https://github.com/basho/otp.git
 erln8 --clone basho
 ```
 
-You must clone each repo after it's added. 
+You must clone each repo after it's added.
 
 ### Cloning remotes
 

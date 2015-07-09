@@ -6,7 +6,7 @@
 
 ## What is erln8?
 
-ernl8 v2 contains several tools that let a developer set custom versions of Erlang, Rebar, and Rebar3 per directory. This allows you to "set and forget" versions of your tools for a project once.
+erln8 v2 contains several tools that let a developer set custom versions of Erlang, Rebar, and Rebar3 per directory. This allows you to "set and forget" versions of your tools for a project once.
 
 erln8 v2 ships with 3 binaries:
 
@@ -36,9 +36,9 @@ You can also ask questions on the [erln8](https://groups.google.com/forum/?hl=en
 - What language is it written in?
 	- D, it's super fast, easy, and it's not C++ or C.
 
-- Why isn't it written in Erlang?	
+- Why isn't it written in Erlang?
 	- chicken and egg, I never assumed you'd have Erlang built to be used by a tool that builds Erlang.
-	
+
 - What does reo mean?
 	- Australian [slang](https://en.wikipedia.org/wiki/Rebar) for "rebar"
 
