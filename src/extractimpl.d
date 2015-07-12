@@ -264,18 +264,13 @@ EOS"
       }
     }
 
-    override void doBuild(Ini cfg, string tag) {
-      doBuild(cfg, tag, null);
-    }
-
-
     // TODO: NEEDS A SYSTEM DEFAULT IF ONE ISN'T SET
-    void doBuild(Ini cfg, string tag, string withErlang) {
+    override void doBuild(Ini cfg, string tag) {
       ElixirBuildOptions opts = getBuildOptions(currentOpts.opt_repo,
           tag,
           currentOpts.opt_id,
           currentOpts.opt_config);
-
+      string withErlang = currentOpts.opt_with_erlang;
       verifyInputs(cfg, opts);
 
       string outputRoot = buildNormalizedPath(getConfigSubdir(installbasedir),opts.id);
@@ -373,8 +368,10 @@ EOS"
         doFetch(cfg);
       } else if(currentOpts.opt_build) {
         foreach(b;currentOpts.opt_build) {
-          doBuild(cfg, b, currentOpts.opt_with_erlang);
+          doBuild(cfg, b);
         }
+      } else if(currentOpts.opt_build_latest) {
+        doBuildLatest(cfg);
       } else if(currentOpts.opt_version) {
         writeln(name, " ", erln8_version);
       } else if(currentOpts.opt_setup_bins) {

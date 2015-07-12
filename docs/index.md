@@ -6,11 +6,12 @@
 
 ## What is erln8?
 
-erln8 v2 contains several tools that let a developer set custom versions of Erlang, Rebar, and Rebar3 per directory. This allows you to "set and forget" versions of your tools for a project once.
+erln8 v2 contains several tools that let a developer set custom versions of Erlang, Elixir, Rebar, and Rebar3 per directory. This allows you to "set and forget" versions of your tools for a project once.
 
 erln8 v2 ships with 3 binaries:
 
-- `erln8` - Erlang version manager, completely rewritten from the ground up.
+- `erln8` - An Erlang version manager, completely rewritten from the ground up.
+- `extract` - An Elixir version manager.
 - `reo` - Rebar version manager, uses the same core code that erln8 uses.
 - `reo3` - Same as reo, but for Rebar3.
 

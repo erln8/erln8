@@ -4,7 +4,7 @@ If you haven't installed erln8 yet, please do so by visiting the [installation](
 
 Note: I'd like these quickstarts to be as quick as possible, but Erlang takes quite a bit of time to build. The erln8 experience is best enjoyed while brewing your favorite beverage.
 
-### "Quickest" start
+### Erlang "Quickest" start
 To build the latest tagged version of Erlang from the OTP Git repo:
 
 ```text
@@ -15,6 +15,18 @@ erln8 --use <some_version>
 ```
 
 Replace `<some_version>` with the version that was built via `--build-latest`.
+
+
+### Elixir "Quickest" start
+To build the latest tagged version of Erlang from the OTP Git repo:
+
+```text
+erln8 --build-latest
+extract --buildable # pick a version. We'll pick v1.0.5 for this example
+extract --build v1.0.5
+extract --use v1.0.5
+```
+
 
 ### Quickstart
 
