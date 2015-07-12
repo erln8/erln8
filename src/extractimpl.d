@@ -38,6 +38,7 @@ class ExtractImpl : Impl {
     this() {
       IdKey = "Elixirs";
       name = "extract";
+      commands = ["elixir", "elixirc", "iex", "mix"];
       installbasedir = getConfigSubdir("elixirs");
       repodir = getConfigSubdir("elixir_repos");
       appConfigName = "extract_config";
