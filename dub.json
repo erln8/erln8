@@ -9,6 +9,7 @@
 	},
   "postBuildCommands": [
       "cp erln8 reo",
-      "cp erln8 reo3"
+      "cp erln8 reo3",
+      "cp erln8 extract"
   ]
 }

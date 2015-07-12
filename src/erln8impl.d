@@ -305,41 +305,7 @@ osx_gcc_env=CC=gcc-4.2 CPPFLAGS='-DNDEBUG' MAKEFLAGS='-j 3'k
 
 
 
-    void setupLinks(string root) {
-      foreach(bin;bins) {
-        string base = baseName(bin);
-        if(bin.indexOf('*') >= 0) {
-          // paths that include a *
-          string p = buildNormalizedPath(root, "dist", bin);
-          log_debug("Getting full path of ", p);
-          log_debug("  basename = ", base);
-          auto ls = executeShell("ls " ~ p);
-          if (ls.status != 0) {
-            writeln("Failed to find file while creating symlink: ", p);
-            writeln("Most likely an outdated Erlang command. Moving on.");
-            // keep going, most likely a command that doesn't exist in a
-            // newer version of Erlang
-          } else {
-            if(splitLines(ls.output).length > 1) {
-              log_fatal("Found more than 1 executable for ", p , " while creating symlinks");
-              exit(-1);
-            }
-            string fullpath = strip(splitLines(ls.output)[0]);
-            string linkTo = buildNormalizedPath(root, base);
-            log_debug("Found ", fullpath);
-            log_debug("symlink ", fullpath, " to ", linkTo);
-            symlink(fullpath, linkTo);
-          }
-        } else {
-          // paths that do not include a *
-          string fullpath = buildNormalizedPath(root, "dist", bin);
-          string linkTo = buildNormalizedPath(root, base);
-          log_debug("symlink ", fullpath, " to ", linkTo);
-          symlink(fullpath, linkTo);
-        }
-      }
-    }
-
+  
 
     override void doBuild(Ini cfg, string tag) {
       ErlangBuildOptions opts =

@@ -30,6 +30,7 @@ import dirconfig;
 import erln8impl;
 import reoimpl;
 import reo3impl;
+import extractimpl;
 
 
 string erln8_home;
@@ -58,6 +59,9 @@ void registerImpls() {
 
   Reo3Impl reo3 = new Reo3Impl();
   registerImpl(reo3);
+
+  ExtractImpl extract = new ExtractImpl();
+  registerImpl(extract);
 }
 
 // LogLevel
@@ -83,7 +87,7 @@ LogLevel getLogLevel(Ini cfg) {
 void checkForGit() {
   auto gs = executeShell("which git");
   if(gs.status != 0) {
-    log_fatal("git is required to run erln8, reo and reo3");
+    log_fatal("git is required to run erln8, reo, reo3, and extract");
     exit(-1);
   }
 }

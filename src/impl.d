@@ -23,6 +23,7 @@ struct CommandLineOptions {
   string       opt_fetch         = null;
   string[]     opt_build         = null;
   bool         opt_build_latest  = false;
+  string       opt_with_erlang  = null;
   string       opt_repo          = null;
   string       opt_id            = null;
   string       opt_config        = null;
@@ -59,8 +60,9 @@ class Impl {
   abstract void runConfig();
   abstract string[] getSymlinkedExecutables();
   abstract void processArgs(string[] args, bool showHelp);
-  abstract void doBuild(Ini cfg, string tag);
   abstract string[] getBins();
+
+  void doBuild(Ini cfg, string tag) {}
 
   void setupBins() {
     auto binPath = buildNormalizedPath(getConfigDir(), "bin");
@@ -327,4 +329,40 @@ class Impl {
     writeln(e8cfg.getKey("system_default"));
 
   }
+
+  void setupLinks(string root) {
+      foreach(bin;getBins()) {
+        string base = baseName(bin);
+        if(bin.indexOf('*') >= 0) {
+          // paths that include a *
+          string p = buildNormalizedPath(root, "dist", bin);
+          log_debug("Getting full path of ", p);
+          log_debug("  basename = ", base);
+          auto ls = executeShell("ls " ~ p);
+          if (ls.status != 0) {
+            writeln("Failed to find file while creating symlink: ", p);
+            writeln("Most likely an outdated command. Moving on.");
+            // keep going, most likely a command that doesn't exist in a
+            // newer version of Erlang
+          } else {
+            if(splitLines(ls.output).length > 1) {
+              log_fatal("Found more than 1 executable for ", p , " while creating symlinks");
+              exit(-1);
+            }
+            string fullpath = strip(splitLines(ls.output)[0]);
+            string linkTo = buildNormalizedPath(root, base);
+            log_debug("Found ", fullpath);
+            log_debug("symlink ", fullpath, " to ", linkTo);
+            symlink(fullpath, linkTo);
+          }
+        } else {
+          // paths that do not include a *
+          string fullpath = buildNormalizedPath(root, "dist", bin);
+          string linkTo = buildNormalizedPath(root, base);
+          log_debug("symlink ", fullpath, " to ", linkTo);
+          symlink(fullpath, linkTo);
+        }
+      }
+    }
+
 }

@@ -265,41 +265,6 @@ EOS"
     }
 
 
-
-    void setupLinks(string root) {
-      foreach(bin;bins) {
-        string base = baseName(bin);
-        if(bin.indexOf('*') >= 0) {
-          // paths that include a *
-          string p = buildNormalizedPath(root, "dist", bin);
-          log_debug("Getting full path of ", p);
-          log_debug("  basename = ", base);
-          auto ls = executeShell("ls " ~ p);
-          if (ls.status != 0) {
-            writeln("Failed to find file while creating symlink: ", p);
-            // keep going, maybe a command has been removed?
-          } else {
-            if(splitLines(ls.output).length > 1) {
-              log_fatal("Found more than 1 executable for ", p , " while creating symlinks");
-              exit(-1);
-            }
-            string fullpath = strip(splitLines(ls.output)[0]);
-            string linkTo = buildNormalizedPath(root, base);
-            log_debug("Found ", fullpath);
-            log_debug("symlink ", fullpath, " to ", linkTo);
-            symlink(fullpath, linkTo);
-          }
-        } else {
-          // paths that do not include a *
-          string fullpath = buildNormalizedPath(root, "dist", bin);
-          string linkTo = buildNormalizedPath(root, base);
-          log_debug("symlink ", fullpath, " to ", linkTo);
-          symlink(fullpath, linkTo);
-        }
-      }
-    }
-
-
     // TODO: NEEDS A SYSTEM DEFAULT IF ONE ISN'T SET
     override void doBuild(Ini cfg, string tag) {
       RebarBuildOptions opts = getBuildOptions(currentOpts.opt_repo,
