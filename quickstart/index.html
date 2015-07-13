@@ -105,7 +105,9 @@
     
         <li class="main active"><a href="#quickstart">Quickstart</a></li>
         
-            <li><a href="#quickest-start">"Quickest" start</a></li>
+            <li><a href="#erlang-quickest-start">Erlang "Quickest" start</a></li>
+        
+            <li><a href="#elixir-quickest-start">Elixir "Quickest" start</a></li>
         
             <li><a href="#quickstart_1">Quickstart</a></li>
         
@@ -120,7 +122,7 @@
 <h2 id="quickstart">Quickstart</h2>
 <p>If you haven't installed erln8 yet, please do so by visiting the <a href="../installation/">installation</a> page.</p>
 <p>Note: I'd like these quickstarts to be as quick as possible, but Erlang takes quite a bit of time to build. The erln8 experience is best enjoyed while brewing your favorite beverage.</p>
-<h3 id="quickest-start">"Quickest" start</h3>
+<h3 id="erlang-quickest-start">Erlang "Quickest" start</h3>
 <p>To build the latest tagged version of Erlang from the OTP Git repo:</p>
 <pre><code class="text">erln8 --build-latest
 erln8 --list
@@ -129,6 +131,14 @@ erln8 --use &lt;some_version&gt;
 </code></pre>
 
 <p>Replace <code>&lt;some_version&gt;</code> with the version that was built via <code>--build-latest</code>.</p>
+<h3 id="elixir-quickest-start">Elixir "Quickest" start</h3>
+<p>To build the latest tagged version of Erlang from the OTP Git repo:</p>
+<pre><code class="text">erln8 --build-latest
+extract --buildable # pick a version. We'll pick v1.0.5 for this example
+extract --build v1.0.5
+extract --use v1.0.5
+</code></pre>
+
 <h3 id="quickstart_1">Quickstart</h3>
 <pre><code class="text"># pick a version from
 erln8 --buildable
