@@ -22,8 +22,8 @@ To build the latest tagged version of Erlang from the OTP Git repo:
 
 ```text
 erln8 --build-latest
-extract --buildable # pick a version. We'll pick v1.0.5 for this example
-extract --build v1.0.5
+extract --build-latest
+# at the time of writing, v1.0.5 was the latest version of Elixir
 extract --use v1.0.5
 ```
 

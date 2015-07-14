@@ -65,7 +65,7 @@ erln8 --build OTP_R16B03-1 --build OTP-17.0 --build OTP-18.0
 
 Building from an alternate repo:
 
-```
+```text
 erln8 --build origin/basho-otp-18 --repo basho --id basho18
 ```
 
@@ -78,7 +78,7 @@ The default erln8 repo is the canonical OTP repository `https://github.com/erlan
 
 ### Display a list of configured repos
 
-```
+```text
 erln8 --repos
 default -> https://github.com/erlang/otp.git
 basho -> https://github.com/basho/otp.git
@@ -88,7 +88,7 @@ basho -> https://github.com/basho/otp.git
 
 You can add additional repos to build Erlang from via `--remote add`:
 
-```
+```text
 erln8 --remote add basho https://github.com/basho/otp.git
 erln8 --clone basho
 ```
@@ -101,7 +101,7 @@ You must clone each repo after it's added.
 
 To pull down new git objects from the default OTP repository:
 
-```
+```text
 erln8 --fetch default
 # pull down objects from a repo named "basho"
 erln8 --fetch basho
@@ -170,7 +170,7 @@ The `[Configs]` section maintains a list build configurations for Erlang.
 
 If the links in `~/.erln8.d/bin` become invalid, or the binary moves, you can recreate them with:
 
-```
+```text
 erln8 --setup-bins
 ```
 
