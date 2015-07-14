@@ -173,7 +173,8 @@ class Impl {
   void doBuildLatest(Ini cfg) {
     string repo = currentOpts.opt_repo == null ? "default" : currentOpts.opt_repo;
     string sourcePath = buildNormalizedPath(getConfigSubdir(repodir), repo);
-    string cmd = "cd " ~ sourcePath ~ " && git describe --abbrev=0 --tags";
+    string cmd = "cd " ~ sourcePath ~ " && git describe --tags `git rev-list --tags --max-count=1`";
+
     auto cmdout = executeShell(cmd);
     string finaltag = cmdout.output.strip;
     writeln("Latest tag = ", finaltag);
