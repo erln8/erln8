@@ -200,21 +200,21 @@ erln8 --build-latest
 
 <h2 id="advanced-builds">Advanced Builds</h2>
 <p>Building from an alternate repo:</p>
-<pre><code>erln8 --build origin/basho-otp-18 --repo basho --id basho18
+<pre><code class="text">erln8 --build origin/basho-otp-18 --repo basho --id basho18
 </code></pre>
 
 <p>Note: the <code>origin/</code> prefix may be required when working with repos other than <code>default</code>.</p>
 <h2 id="repos-multiple-repositories">Repos + Multiple Repositories</h2>
 <p>The default erln8 repo is the canonical OTP repository <code>https://github.com/erlang/otp.git</code>. You can, however, build from multiple repos.</p>
 <h3 id="display-a-list-of-configured-repos">Display a list of configured repos</h3>
-<pre><code>erln8 --repos
+<pre><code class="text">erln8 --repos
 default -&gt; https://github.com/erlang/otp.git
 basho -&gt; https://github.com/basho/otp.git
 </code></pre>
 
 <h3 id="adding-and-removing-remotes">Adding and removing remotes</h3>
 <p>You can add additional repos to build Erlang from via <code>--remote add</code>:</p>
-<pre><code>erln8 --remote add basho https://github.com/basho/otp.git
+<pre><code class="text">erln8 --remote add basho https://github.com/basho/otp.git
 erln8 --clone basho
 </code></pre>
 
@@ -222,7 +222,7 @@ erln8 --clone basho
 <h3 id="cloning-remotes">Cloning remotes</h3>
 <h3 id="fetching-from-remotes">Fetching from remotes</h3>
 <p>To pull down new git objects from the default OTP repository:</p>
-<pre><code>erln8 --fetch default
+<pre><code class="text">erln8 --fetch default
 # pull down objects from a repo named &quot;basho&quot;
 erln8 --fetch basho
 </code></pre>
@@ -328,7 +328,7 @@ osx_gcc_env=CC=gcc-4.2 CPPFLAGS='-DNDEBUG' MAKEFLAGS='-j 3'k
 </table>
 <h2 id="regenerating-erln8-links">Regenerating erln8 links</h2>
 <p>If the links in <code>~/.erln8.d/bin</code> become invalid, or the binary moves, you can recreate them with:</p>
-<pre><code>erln8 --setup-bins
+<pre><code class="text">erln8 --setup-bins
 </code></pre>
 
 <hr />
