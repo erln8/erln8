@@ -360,7 +360,7 @@ EOS"
       log_debug("Running: ", cmdline);
       string bin = baseName(cmdline[0]);
 
-      DirconfigResult dcr = getConfigFromCWD();
+      DirconfigResult dcr = getConfigFromCWD("Rebar3");
       auto dirini = dcr.ini;
       string rebarId;
 
@@ -370,12 +370,16 @@ EOS"
           log_debug("Using system_default ", e8cfg.getKey("system_default"));
           rebarId = e8cfg.getKey("system_default");
         } else {
-          log_fatal("Can't find a configured version of Rebar");
+          log_fatal("Can't find a configured version of Rebar3");
           exit(-1);
         }
       } else {
-         rebarId = dirini["Config"].getKey("Rebar3");
-         log_debug("Rebar id:", dirini["Config"].getKey("Rebar3"));
+         if(dirini["Config"].hasKey("Rebar3")) {
+           rebarId = dirini["Config"].getKey("Rebar3");
+           log_debug("Rebar id:", dirini["Config"].getKey("Rebar3"));
+         } else {
+           writeln("Rebar3 version not specified"); 
+         }
       }
 
       if(!isValidRebar(cfg, rebarId)) {

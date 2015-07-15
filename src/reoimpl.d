@@ -360,7 +360,8 @@ EOS"
       log_debug("Running: ", cmdline);
       string bin = baseName(cmdline[0]);
 
-      DirconfigResult dcr = getConfigFromCWD();
+      DirconfigResult dcr = getConfigFromCWD("Rebar");
+      log_debug("Got config from cwd");
       auto dirini = dcr.ini;
       string rebarId;
 
@@ -374,8 +375,12 @@ EOS"
           exit(-1);
         }
       } else {
-         rebarId = dirini["Config"].getKey("Rebar");
-         log_debug("Rebar id:", dirini["Config"].getKey("Rebar"));
+         if(dirini["Config"].hasKey("Rebar")) {
+           rebarId = dirini["Config"].getKey("Rebar");
+           log_debug("Rebar id:", dirini["Config"].getKey("Rebar"));
+         } else {
+           writeln("Rebar version not specified"); 
+         }
       }
 
       if(!isValidRebar(cfg, rebarId)) {
