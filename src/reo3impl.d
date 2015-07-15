@@ -345,6 +345,8 @@ EOS"
         foreach(b;currentOpts.opt_build) {
           doBuild(cfg, b);
         }
+      } else if(currentOpts.opt_build_latest) {
+        doBuildLatest(cfg);
       } else if(currentOpts.opt_version) {
         writeln(name, " ", erln8_version);
       } else if(currentOpts.opt_setup_bins) {
