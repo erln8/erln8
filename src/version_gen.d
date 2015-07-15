@@ -1,1 +1,1 @@
-const ERLN8_VERSION="2.0.4-BETA";
+const ERLN8_VERSION="2.0.5-BETA";
