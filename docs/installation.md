@@ -107,8 +107,18 @@ make install
 ```
 
 
+## Ansible
+[Tyler Cross](https://github.com/wtcross) put together an [Ansible playbook](https://galaxy.ansible.com/list#/roles/4412).
 
+Soure located [here](https://github.com/wtcross/ansible-erln8).
 
+## Chef
+
+Here's a [Chef cookbook](https://github.com/erln8/erln8_chef) for installing erln8 in Ubuntu 15.04. You might be able to twist my arm to add other platforms.
+
+## Docker
+
+I release erln8 binaries via Docker. If you need to use a Dockerfile to build, check [this](https://github.com/erln8/erln8/tree/master/binary_gen) out.
 
 ---
 
