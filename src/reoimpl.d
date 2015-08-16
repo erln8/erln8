@@ -108,8 +108,6 @@ EOS"
             "prompt",    "Same as above without a newline, suitable to use in a prompt",  &opts.opt_prompt,
             "configs",   "List build configs",  &opts.opt_configs,
             "repos",     "List build repos",  &opts.opt_repos,
-            "link",      "Link a non-reo build of Rebar to reo",  &opts.opt_link,
-            "unlink",    "Unlink a non-reo build of Rebar from reo",  &opts.opt_unlink,
             "force",     "Overwrite an erln8.config in the current directory",  &opts.opt_force,
             "buildable", "List tags to build from configured source repos", &opts.opt_buildable,
             "version",   "Show the installed version of reo", &opts.opt_version,
@@ -121,7 +119,7 @@ EOS"
           auto bannerMichael = "Usage: " ~ name ~ " [--use <id> --force] [--list] [--remote add|delete|show]\n";
           bannerMichael ~= "       [--clone <remotename>] [--fetch <remotename>] [--show] [--prompt]\n";
           bannerMichael ~= "       [--build --id <someid> --repo <remotename> --config <configname>]\n";
-          bannerMichael ~= "       [--buildable] [--configs] [--link <path>] [--unline <id>]\n";
+          bannerMichael ~= "       [--buildable] [--configs] \n";
           defaultGetoptPrinter(bannerMichael.color(fg.yellow), rslt.options);
           exit(0);
         }

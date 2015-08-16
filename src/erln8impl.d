@@ -141,8 +141,6 @@ osx_gcc_env=CC=gcc-4.2 CPPFLAGS='-DNDEBUG' MAKEFLAGS='-j 3'k
             "repos",         "List build repos",  &opts.opt_repos,
             "set-default",   "Set the system-wide Erlang default", &opts.opt_set_default,
             "get-default",   "Display the system-wide Erlang default",  &opts.opt_get_default,
-            "link",          "Link a non-erln8 build of Erlang to erln8",  &opts.opt_link,
-            "unlink",        "Unlink a non-erln8 build of Erlang from erln8",  &opts.opt_unlink,
             "force",         "Overwrite an erln8.config in the current directory",  &opts.opt_force,
             "buildable",     "List tags to build from configured source repos", &opts.opt_buildable,
             "version",       "Show the installed version of erln8", &opts.opt_version,
@@ -154,7 +152,7 @@ osx_gcc_env=CC=gcc-4.2 CPPFLAGS='-DNDEBUG' MAKEFLAGS='-j 3'k
           auto bannerMichael = "Usage: " ~ name ~ " [--use <id> --force] [--list] [--remote add|delete|show]\n";
           bannerMichael ~= "       [--clone <remotename>] [--fetch <remotename>] [--show] [--prompt]\n";
           bannerMichael ~= "       [--build --id <someid> --repo <remotename> --config <configname>]\n";
-          bannerMichael ~= "       [--buildable] [--configs] [--link <path>] [--unline <id>]\n";
+          bannerMichael ~= "       [--buildable] [--configs] \n";
           defaultGetoptPrinter(bannerMichael.color(fg.yellow), rslt.options);
           exit(0);
         }

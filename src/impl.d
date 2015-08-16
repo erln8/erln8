@@ -31,8 +31,6 @@ struct CommandLineOptions {
   bool         opt_prompt        = false;
   bool         opt_configs       = false;
   bool         opt_repos         = false;
-  bool         opt_link          = false;
-  bool         opt_unlink        = false;
   bool         opt_force         = false;
   bool         opt_buildable     = false;
   bool         opt_debug         = false;
