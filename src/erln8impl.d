@@ -238,7 +238,11 @@ osx_gcc_env=CC=gcc-4.2 CPPFLAGS='-DNDEBUG' MAKEFLAGS='-j 3'k
       opts.repo = (repo == null ? "default" : repo);
       opts.tag = tag;
       if(id == null) {
-        opts.id  = tag;
+      	if (configname == null || configname =="") {
+	   opts.id = tag;
+	} else {
+	   opts.id  = tag ~ "-" ~ configname;
+        }
       } else {
         opts.id  = id;
       }
@@ -331,7 +335,7 @@ osx_gcc_env=CC=gcc-4.2 CPPFLAGS='-DNDEBUG' MAKEFLAGS='-j 3'k
       log_debug("Output root = ", outputRoot);
       log_debug("Output path = ", outputPath);
       log_debug("Source path = ", sourcePath);
-      log_debug("Config      = ", opts.configname);
+      log_debug("Config name = ", opts.configname);
       log_debug("Config env  = ", env);
 
       string tmp = buildNormalizedPath(tempDir(), getTimestampedFilename());
@@ -347,8 +351,13 @@ osx_gcc_env=CC=gcc-4.2 CPPFLAGS='-DNDEBUG' MAKEFLAGS='-j 3'k
 
       string cmd1 = format("%s cd %s && ./otp_build autoconf > ./build_log 2>&1",
           env, tmp);
+
+      string config = "";
+      if (opts.configname != null && opts.configname != "") {
+      	 config = cfg["Configs"].getKey(opts.configname);
+      }
       string cmd2 = format("%s cd %s && ./configure --prefix=%s %s >> ./build_log 2>&1",
-          env, tmp, outputPath, ""); // TODO buildconfig
+	             env, tmp, outputPath, config);
 
       // TODO: configurable parallelism
       string cmd3 = format("%s cd %s && %s -j4 >> ./build_log 2>&1",
