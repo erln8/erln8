@@ -71,7 +71,7 @@ system_default=
 color=true
 
 [Repos]
-default=git@github.com:rebar/rebar3.git
+default=https://github.com/rebar/rebar3.git
 
 [Rebar3s]
 none =
