@@ -124,6 +124,7 @@ osx_gcc_env=CC=gcc-4.2 CPPFLAGS='-DNDEBUG' MAKEFLAGS='-j 3'k
         auto rslt = getopt(
             args,
             std.getopt.config.passThrough,
+            std.getopt.config.keepEndOfOptions,
             "use",           "Setup the current directory to use a specific verion of Erlang", &opts.opt_use,
             "list",          "List available Erlang installations",      &opts.opt_list,
             "remote",        "add/delete/show remotes", &opts.opt_remote,
