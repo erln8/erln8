@@ -3,15 +3,18 @@
 ![erln8 logo](img/erln8.png)
 
 
+## Status
+
+Due to time constraints, I no longer have the time to maintain this project. Consider using https://github.com/metadave/erln8 instead.
+
 
 ## What is erln8?
 
-erln8 v2 contains several tools that let a developer set custom versions of Erlang, Elixir, Rebar, and Rebar3 per directory. This allows you to "set and forget" versions of your tools for a project once.
+erln8 v2 contains several tools that let a developer set custom versions of Erlang, Rebar, and Rebar3 per directory. This allows you to "set and forget" versions of your tools for a project once.
 
 erln8 v2 ships with 3 binaries:
 
 - `erln8` - An Erlang version manager, completely rewritten from the ground up.
-- `extract` - An Elixir version manager.
 - `reo` - Rebar version manager, uses the same core code that erln8 uses.
 - `reo3` - Same as reo, but for Rebar3.
 
@@ -42,14 +45,6 @@ You can also ask questions on the [erln8](https://groups.google.com/forum/?hl=en
 
 - What does reo mean?
 	- Australian [slang](https://en.wikipedia.org/wiki/Rebar) for "rebar"
-
-
-
-## Getting help
-
-You can ask questions on the Freenode `#erln8` IRC channel.
-
-You can also ask questions on the [erln8](https://groups.google.com/forum/?hl=en#!forum/erln8) mailing list.
 
 
 ---

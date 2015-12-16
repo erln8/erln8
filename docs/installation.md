@@ -39,12 +39,6 @@ cd erln8_<platform>
 
 ### OSX Yosemite
 
-The easiest way is via Homebrew:
-
-```
-brew install https://raw.githubusercontent.com/erln8/homebrew/erln8_v2/Library/Formula/erln8.rb
-```
-
 To build manually, use the following:
 
 ```text
