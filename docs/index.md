@@ -5,7 +5,11 @@
 
 ## Status
 
-Due to time constraints, I no longer have the time to maintain this project. Consider using https://github.com/metadave/erln8 instead.
+[![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/)
+
+Due to time constraints, I no longer have the time to maintain this project. I'm happy to review and merge PR's though.
+
+Consider using https://github.com/metadave/erln8 instead.
 
 
 ## What is erln8?
