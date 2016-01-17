@@ -8,7 +8,7 @@ To install from a binary package:
 
 ```
 tar xvzf ./erln8_<platform>.tgz
-cd erln8_<platform>
+cd erln8
 ./install.sh
 ```
 
@@ -110,7 +110,7 @@ Soure located [here](https://github.com/wtcross/ansible-erln8).
 
 Here's a [Chef cookbook](https://github.com/erln8/erln8_chef) for installing erln8 in Ubuntu 15.04. You might be able to twist my arm to add other platforms.
 
-## Puppet 
+## Puppet
 
 [Joseph Dunne](https://github.com/josephDunne) has started an erln8 [Puppet module](https://github.com/josephDunne/puppet-erln8).
 
