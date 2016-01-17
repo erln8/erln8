@@ -1,5 +1,7 @@
 # erln8
 
+[![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/)
+
 Installation and usage docs [here](http://erln8.github.io/erln8/).
 
 # License
